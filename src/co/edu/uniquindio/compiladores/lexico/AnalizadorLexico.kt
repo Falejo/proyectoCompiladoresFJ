@@ -10,6 +10,8 @@ class AnalizadorLexico(var codigoFuente:String) {
     var finCodigo = 0.toChar()
     var filaActual = 0
     var columnaActual = 0
+    val operadoresAritmeticos = ArrayList<Char>()
+    var listaErrores = ArrayList<Error>()
 
 
     fun almacenarToken(lexema:String, categoria: Categoria, fila:Int, columna:Int) = listaTokens.add(Token(lexema, categoria, fila, columna))
@@ -22,6 +24,13 @@ class AnalizadorLexico(var codigoFuente:String) {
     }
 
     fun analizar(){
+
+        operadoresAritmeticos.add('+')
+        operadoresAritmeticos.add('-')
+        operadoresAritmeticos.add('*')
+        operadoresAritmeticos.add('/')
+
+
         while(caracterActual != finCodigo){
 
             if (caracterActual == ' ' || caracterActual == '\t' || caracterActual == '\n'){
@@ -31,6 +40,7 @@ class AnalizadorLexico(var codigoFuente:String) {
 
             if (esEntero()) continue
             if (esDecimal()) continue
+            if (esIdentificador()) continue
             almacenarToken(""+caracterActual, Categoria.DESCONOCIDO, filaActual, columnaActual)
             obtenerSiguienteCaracter()
 
@@ -103,6 +113,41 @@ class AnalizadorLexico(var codigoFuente:String) {
         return false
     }
 
+
+    /**
+     * este metodo permite la validacón del token Identificadores
+     */
+
+    fun esIdentificador():Boolean {
+
+        if(caracterActual=='~'){
+            var lexema = ""
+            var filaInicial=filaActual
+            var columnaInicial=columnaActual
+            var posicionInicial=posicionActual
+
+            lexema+=caracterActual
+            obtenerSiguienteCaracter()
+            if(caracterActual.isLetter()){
+                do{
+                    lexema += caracterActual
+                    obtenerSiguienteCaracter()
+                }while (caracterActual != '$')
+            }else{
+                lexema+=caracterActual
+                obtenerSiguienteCaracter()
+                almacenarToken(lexema, Categoria.DESCONOCIDO, filaInicial,columnaInicial);
+                return true
+            }
+            lexema+=caracterActual
+            obtenerSiguienteCaracter()
+            almacenarToken(lexema, Categoria.IDENTIFICADOR, filaInicial, columnaInicial);
+
+            return true
+        }
+        return false
+    }
+
     fun obtenerSiguienteCaracter(){
         if (posicionActual == codigoFuente.length-1){
             caracterActual = finCodigo
@@ -119,4 +164,7 @@ class AnalizadorLexico(var codigoFuente:String) {
             caracterActual = codigoFuente[posicionActual]
         }
     }
+
+
+
 }
