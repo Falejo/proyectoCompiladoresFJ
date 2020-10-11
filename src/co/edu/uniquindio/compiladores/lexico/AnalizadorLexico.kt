@@ -124,7 +124,7 @@ class AnalizadorLexico(var codigoFuente:String) {
             var lexema = ""
             var filaInicial=filaActual
             var columnaInicial=columnaActual
-            var posicionInicial=posicionActual
+
 
             lexema+=caracterActual
             obtenerSiguienteCaracter()
@@ -132,7 +132,7 @@ class AnalizadorLexico(var codigoFuente:String) {
                 do{
                     lexema += caracterActual
                     obtenerSiguienteCaracter()
-                }while (caracterActual != '$')
+                }while (caracterActual != '~')
             }else{
                 lexema+=caracterActual
                 obtenerSiguienteCaracter()
