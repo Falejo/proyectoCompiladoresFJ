@@ -3,6 +3,7 @@ package co.edu.uniquindio.compiladores.lexico
 class AnalizadorLexico(var codigoFuente:String) {
 
     //comentario de prueba
+    //segundo comentario
 
     var posicionActual = 0
     var caracterActual = codigoFuente[0]
