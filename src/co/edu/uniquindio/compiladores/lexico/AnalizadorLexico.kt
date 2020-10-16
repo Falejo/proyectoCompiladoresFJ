@@ -11,6 +11,7 @@ class AnalizadorLexico(var codigoFuente:String) {
     var columnaActual = 0
     val operadoresAritmeticos = ArrayList<Char>()
     var listaErrores = ArrayList<Error>()
+    var palabrasRes=ArrayList<String>()
 
 
     fun almacenarToken(lexema:String, categoria: Categoria, fila:Int, columna:Int) = listaTokens.add(Token(lexema, categoria, fila, columna))
@@ -28,6 +29,35 @@ class AnalizadorLexico(var codigoFuente:String) {
         operadoresAritmeticos.add('-')
         operadoresAritmeticos.add('*')
         operadoresAritmeticos.add('/')
+        operadoresAritmeticos.add('%')
+
+        palabrasRes.add("yes")
+        palabrasRes.add("more")
+        palabrasRes.add("lessons")
+        palabrasRes.add("isTF")
+        palabrasRes.add("isT")
+        palabrasRes.add("isF")
+        palabrasRes.add("recent")
+        palabrasRes.add("subject")
+        palabrasRes.add("fix")
+        palabrasRes.add("float")
+        palabrasRes.add("long")
+        palabrasRes.add("duplex")
+        palabrasRes.add("time")
+        palabrasRes.add("by")
+        palabrasRes.add("open")
+        palabrasRes.add("own")
+        palabrasRes.add("care")
+        palabrasRes.add("realize")
+        palabrasRes.add("include")
+        palabrasRes.add("reason")
+        palabrasRes.add("task")
+        palabrasRes.add("back")
+        palabrasRes.add("never")
+        palabrasRes.add("his")
+        palabrasRes.add("pack")
+        palabrasRes.add("bring")
+        palabrasRes.add("obtain")
 
 
         while(caracterActual != finCodigo){
@@ -40,6 +70,20 @@ class AnalizadorLexico(var codigoFuente:String) {
             if (esEntero()) continue
             if (esDecimal()) continue
             if (esIdentificador()) continue
+            if (esCaracter())continue
+            if (esCadena()) continue
+            if (esAgrupador()) continue
+            if (esComentarioBloque()) continue
+            if(esComentarioLinea()) continue
+            if(esOperadorAsignacion()) continue
+            if (esOperadorIncremento()) continue
+            if (esOperadorLogico() ) continue
+            if (esOperadorMatematico()) continue
+            if (esOperadorRelacional()) continue
+            if (esSeparador())continue
+            if (esPalabraReservada()) continue
+            if (finLinea())continue
+
             almacenarToken(""+caracterActual, Categoria.DESCONOCIDO, filaActual, columnaActual)
             obtenerSiguienteCaracter()
 
@@ -240,6 +284,333 @@ class AnalizadorLexico(var codigoFuente:String) {
             almacenarToken(lexema, Categoria.CORCHETE_DERECHO, filaInicial, columnaInicial);
             obtenerSiguienteCaracter()
             return true
+        }
+        return false
+    }
+
+    /**
+     * * Este metodo permite construir el token de Operaor de Incremento y decremento
+     */
+    fun esOperadorIncremento():Boolean{
+        var lexema =""
+        var filaInicial=filaActual
+        var columnaInicial=columnaActual
+        var posicionInicial=posicionActual
+
+        if (caracterActual=='+' || caracterActual=='-'){
+            lexema+=caracterActual
+            obtenerSiguienteCaracter()
+
+            if(caracterActual=='+'&& lexema=="+"){
+                lexema+=caracterActual
+                almacenarToken(lexema, Categoria.OPERADOR_INCREMENTO, filaInicial, columnaInicial);
+                obtenerSiguienteCaracter()
+                return true
+            } else if(caracterActual=='-'&& lexema=="-"){
+                lexema+=caracterActual
+                almacenarToken(lexema, Categoria.OPERADOR_DECREMENTO, filaInicial, columnaInicial);
+                obtenerSiguienteCaracter()
+                return true
+            }else{
+                hacerBT(posicionInicial,filaInicial,columnaInicial)
+                return false
+            }
+
+        }
+        return false
+    }
+
+    /**
+     * Este metodo permite construir el token de palabra reservada
+     */
+    fun esPalabraReservada():Boolean{
+
+        if(caracterActual.isLetter()){
+            var lexema =""
+            var filaInicial=filaActual
+            var columnaInicial=columnaActual
+            var posicionInicial=posicionActual
+
+            lexema+=caracterActual
+            obtenerSiguienteCaracter()
+
+            while (caracterActual.isLetter()){
+                lexema+=caracterActual
+                obtenerSiguienteCaracter()
+            }
+
+            if(palabrasRes.contains(lexema.toLowerCase()) ){
+
+                almacenarToken(lexema, Categoria.PALABRA_RESERVADA, filaInicial, columnaInicial);
+                return true
+
+            }
+            hacerBT(posicionInicial,filaInicial,columnaInicial)
+            return false
+        }
+        return false
+    }
+
+    /**
+     * Este metodo permite construir el token del separador, punto y dos puntos
+     */
+    fun esSeparador():Boolean{
+
+        var lexema =""
+        var filaInicial=filaActual
+        var columnaInicial=columnaActual
+        var posicionInicial=posicionActual
+
+        if(caracterActual==','){
+            lexema+=caracterActual
+            obtenerSiguienteCaracter()
+            almacenarToken(lexema, Categoria.SEPARADOR_COMA, filaInicial, columnaInicial);
+            return true
+        }
+
+        if(caracterActual=='.'){
+            lexema+=caracterActual
+            obtenerSiguienteCaracter()
+            almacenarToken(lexema, Categoria.PUNTO, filaInicial, columnaInicial);
+            return true
+        }
+
+        if(caracterActual==':'){
+            lexema+=caracterActual
+            obtenerSiguienteCaracter()
+            almacenarToken(lexema, Categoria.DOSPUNTOS, filaInicial, columnaInicial);
+            return true
+        }
+
+        return false
+    }
+
+    /**
+     * Este metodo permite construir el token de cadena
+     */
+    fun esCadena():Boolean{
+        if(caracterActual=='"'){
+            var lexema =""
+            var filaInicial=filaActual
+            var columnaInicial=columnaActual
+            var posicionInicial=posicionActual
+            lexema+=caracterActual
+            obtenerSiguienteCaracter()
+
+            while (caracterActual!='"'){
+                lexema+=caracterActual
+                obtenerSiguienteCaracter()
+            }
+            if (caracterActual=='"') {
+                lexema+=caracterActual
+                obtenerSiguienteCaracter()
+                almacenarToken(lexema, Categoria.CADENA, filaInicial, columnaInicial);
+                return true
+
+            }
+
+        }
+        return false
+    }
+
+    /**
+     * Este metodo permite construir el token de operador matematico
+     */
+    fun esOperadorMatematico():Boolean{
+
+        var lexema =""
+        var filaInicial=filaActual
+        var columnaInicial=columnaActual
+        var posicionInicial=posicionActual
+
+        if (operadoresAritmeticos.contains(caracterActual)) {
+            lexema+=caracterActual
+            obtenerSiguienteCaracter()
+
+            if (operadoresAritmeticos.contains(caracterActual) || caracterActual == '='){
+
+                hacerBT(posicionInicial,filaInicial,columnaInicial)
+                return false
+
+            }
+            almacenarToken(lexema, Categoria.OPERADOR_MATEMATICO, filaActual, columnaActual)
+
+            return true
+        }
+
+        return false
+    }
+
+    /**
+     * Este metodo permite construir el token de operador de asignacion
+     */
+    fun esOperadorAsignacion():Boolean{
+        var lexema =""
+        var filaInicial=filaActual
+        var columnaInicial=columnaActual
+        var posicionInicial=posicionActual
+
+        if (operadoresAritmeticos.contains(caracterActual)) {
+            lexema+=caracterActual
+            obtenerSiguienteCaracter()
+
+            if (caracterActual=='=') {
+                lexema+=caracterActual
+                almacenarToken(lexema, Categoria.OPERADOR_ASIGNACION, filaActual, columnaActual)
+                obtenerSiguienteCaracter()
+                return true
+
+            } else{
+                hacerBT(posicionInicial,filaInicial,columnaInicial)
+                return false
+            }
+
+        }else if(caracterActual=='='){
+            lexema+=caracterActual
+            almacenarToken(lexema, Categoria.OPERADOR_ASIGNACION, filaActual, columnaActual)
+            obtenerSiguienteCaracter()
+            return true
+        }
+
+        return false
+    }
+
+    /**
+     * Este metodo permite construir el token de operador logico
+     */
+    fun esOperadorLogico():Boolean{
+        val operadoresLog = ArrayList<Char>()
+        operadoresLog.add('&')
+        operadoresLog.add('|')
+        operadoresLog.add('!')
+
+        var lexema =""
+        var filaInicial=filaActual
+        var columnaInicial=columnaActual
+        var posicionInicial=posicionActual
+
+        if (operadoresLog.contains(caracterActual)) {
+            lexema+=caracterActual
+
+            if (lexema.equals( "&") or lexema.equals("|")){
+
+                almacenarToken(lexema, Categoria.OPERADOR_LOGICO_BINARIO, filaActual, columnaActual)
+                obtenerSiguienteCaracter()
+                return true
+            }else{
+                almacenarToken(lexema, Categoria.OPERADOR_LOGICO_UNARIO, filaActual, columnaActual)
+                obtenerSiguienteCaracter()
+                return true
+            }
+        }
+        return false
+    }
+
+    /**
+     * Este metodo permite construir el token de operador relacional
+     */
+    fun esOperadorRelacional():Boolean{
+        val operadoresRelac = ArrayList<Char>()
+        operadoresRelac.add('<')
+        operadoresRelac.add('>')
+        operadoresRelac.add('=')
+
+        var lexema =""
+        var filaInicial=filaActual
+        var columnaInicial=columnaActual
+        var posicionInicial=posicionActual
+
+        if (operadoresRelac.contains(caracterActual)) {
+            lexema+=caracterActual
+            obtenerSiguienteCaracter()
+
+            if (caracterActual=='=') {
+                lexema+=caracterActual
+                almacenarToken(lexema, Categoria.OPERADOR_RELACIONAL, filaActual, columnaActual)
+                obtenerSiguienteCaracter()
+                return true
+            }
+            if(operadoresRelac.contains(caracterActual)){
+                lexema+=caracterActual
+                almacenarToken(lexema, Categoria.DESCONOCIDO, filaActual, columnaActual)
+                obtenerSiguienteCaracter()
+                return true
+            }
+            if(lexema=="="){
+                hacerBT(posicionInicial,filaInicial,columnaInicial)
+            }else {
+                almacenarToken(lexema, Categoria.OPERADOR_RELACIONAL, filaActual, columnaActual)
+                return true
+            }
+        }
+
+        return false
+    }
+
+    /**
+     * Este metodo permite construir el token de fin de linea
+     */
+    fun finLinea():Boolean{
+        if(caracterActual=='\n'){
+            almacenarToken(""+caracterActual,Categoria.FIN_SENTENCIA,filaActual,columnaActual)
+            obtenerSiguienteCaracter()
+            return true
+        }
+        return false
+    }
+
+    /**
+     * Este metodo permite construir el token de comentario de linea
+     */
+    fun esComentarioLinea():Boolean{
+        if (caracterActual=='¿'){
+            var lexema =""
+            var filaInicial=filaActual
+            var columnaInicial=columnaActual
+            var posicionInicial=posicionActual
+
+            lexema+=caracterActual
+            obtenerSiguienteCaracter()
+            if (caracterActual=='¿'){
+                lexema+=caracterActual
+                obtenerSiguienteCaracter()
+
+                while (caracterActual!='\n'){
+                    lexema+=caracterActual
+                    obtenerSiguienteCaracter()
+                }
+
+                almacenarToken(lexema,Categoria.COMENTARIO_LINEA,filaInicial,columnaInicial);
+                obtenerSiguienteCaracter()
+                return true
+            }
+        }
+        return false
+    }
+
+    /**
+     * Ente metodo permite determinar si un token es comentario de bloque
+     */
+    fun esComentarioBloque():Boolean{
+        if(caracterActual=='¡'){
+            var lexema =""
+            var filaInicial=filaActual
+            var columnaInicial=columnaActual
+            var posicionInicial=posicionActual
+            lexema+=caracterActual
+            obtenerSiguienteCaracter()
+
+            while (caracterActual!='¡'){
+                lexema+=caracterActual
+                obtenerSiguienteCaracter()
+            }
+            if (caracterActual=='¡') {
+                lexema+=caracterActual
+                obtenerSiguienteCaracter()
+                almacenarToken(lexema, Categoria.COMENTARIO_BLOQUE, filaInicial, columnaInicial);
+                return true
+            }
+
         }
         return false
     }
