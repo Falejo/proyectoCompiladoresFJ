@@ -197,6 +197,53 @@ class AnalizadorLexico(var codigoFuente:String) {
         return false
     }
 
+    /**
+     ** Este metodo permite construir el token de agrupador
+     */
+    fun esAgrupador():Boolean{
+        var lexema =""
+        var filaInicial=filaActual
+        var columnaInicial=columnaActual
+        var posicionInicial=posicionActual
+        if (caracterActual=='{'){
+            lexema+=caracterActual
+            almacenarToken(lexema, Categoria.LLAVE_IZQUIERDA, filaInicial, columnaInicial);
+            obtenerSiguienteCaracter()
+            return true
+        }
+        if (caracterActual=='}'){
+            lexema+=caracterActual
+            almacenarToken(lexema, Categoria.LLAVE_DERECHA, filaInicial, columnaInicial);
+            obtenerSiguienteCaracter()
+            return true
+        }
+        if (caracterActual=='('){
+            lexema+=caracterActual
+            almacenarToken(lexema, Categoria.PARENTESIS_IZQUIERDO, filaInicial, columnaInicial);
+            obtenerSiguienteCaracter()
+            return true
+        }
+        if (caracterActual==')'){
+            lexema+=caracterActual
+            almacenarToken(lexema, Categoria.PARENTESIS_DERECHO, filaInicial, columnaInicial);
+            obtenerSiguienteCaracter()
+            return true
+        }
+        if (caracterActual=='['){
+            lexema+=caracterActual
+            almacenarToken(lexema, Categoria.CORCHETE_IZQUIERDO, filaInicial, columnaInicial);
+            obtenerSiguienteCaracter()
+            return true
+        }
+        if (caracterActual==']'){
+            lexema+=caracterActual
+            almacenarToken(lexema, Categoria.CORCHETE_DERECHO, filaInicial, columnaInicial);
+            obtenerSiguienteCaracter()
+            return true
+        }
+        return false
+    }
+
     fun obtenerSiguienteCaracter(){
         if (posicionActual == codigoFuente.length-1){
             caracterActual = finCodigo
