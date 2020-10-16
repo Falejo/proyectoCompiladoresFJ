@@ -74,8 +74,8 @@ class AnalizadorLexico(var codigoFuente:String) {
             if (esCadena()) continue
             if (esAgrupador()) continue
             if (esComentarioBloque()) continue
-            if(esComentarioLinea()) continue
-            if(esOperadorAsignacion()) continue
+            if (esComentarioLinea()) continue
+            if (esOperadorAsignacion()) continue
             if (esOperadorIncremento()) continue
             if (esOperadorLogico() ) continue
             if (esOperadorMatematico()) continue
@@ -325,27 +325,26 @@ class AnalizadorLexico(var codigoFuente:String) {
      */
     fun esPalabraReservada():Boolean{
 
-        if(caracterActual.isLetter()){
-            var lexema =""
-            var filaInicial=filaActual
-            var columnaInicial=columnaActual
-            var posicionInicial=posicionActual
+        if (caracterActual == '~') {
+            var lexema = ""
+            var filaInicial = filaActual
+            var columnaInicial = columnaActual
+            var posicionInicial = posicionActual
 
-            lexema+=caracterActual
+            lexema += caracterActual
             obtenerSiguienteCaracter()
 
-            while (caracterActual.isLetter()){
-                lexema+=caracterActual
-                obtenerSiguienteCaracter()
+            while (caracterActual.isLetter()) {
+                    lexema += caracterActual
+                    obtenerSiguienteCaracter()
             }
 
-            if(palabrasRes.contains(lexema.toLowerCase()) ){
-
-                almacenarToken(lexema, Categoria.PALABRA_RESERVADA, filaInicial, columnaInicial);
+            if (palabrasRes.contains(lexema.toLowerCase())) {
+                almacenarToken(lexema, Categoria.PALABRA_RESERVADA, filaInicial, columnaInicial)
                 return true
-
             }
-            hacerBT(posicionInicial,filaInicial,columnaInicial)
+            almacenarToken(lexema, Categoria.DESCONOCIDO, filaInicial, columnaInicial)
+            reportarError("La palabra despues del signo ~ no es una palabra reservada")
             return false
         }
         return false
@@ -551,7 +550,7 @@ class AnalizadorLexico(var codigoFuente:String) {
      * Este metodo permite construir el token de fin de linea
      */
     fun finLinea():Boolean{
-        if(caracterActual=='\n'){
+        if(caracterActual=='_'){
             almacenarToken(""+caracterActual,Categoria.FIN_SENTENCIA,filaActual,columnaActual)
             obtenerSiguienteCaracter()
             return true
@@ -570,20 +569,18 @@ class AnalizadorLexico(var codigoFuente:String) {
             var posicionInicial=posicionActual
 
             lexema+=caracterActual
+
             obtenerSiguienteCaracter()
-            if (caracterActual=='¿'){
-                lexema+=caracterActual
-                obtenerSiguienteCaracter()
 
-                while (caracterActual!='\n'){
-                    lexema+=caracterActual
-                    obtenerSiguienteCaracter()
-                }
-
-                almacenarToken(lexema,Categoria.COMENTARIO_LINEA,filaInicial,columnaInicial);
-                obtenerSiguienteCaracter()
-                return true
+            while (caracterActual!='\n'){
+                  lexema+=caracterActual
+                  obtenerSiguienteCaracter()
             }
+
+            almacenarToken(lexema,Categoria.COMENTARIO_LINEA,filaInicial,columnaInicial);
+            obtenerSiguienteCaracter()
+            return true
+
         }
         return false
     }
@@ -632,6 +629,11 @@ class AnalizadorLexico(var codigoFuente:String) {
         }
     }
 
-
+    /**
+     * Este metodo permite agregar un error a la lista de errores
+     */
+    fun reportarError( mensaje:String){
+        listaErrores.add(Error(mensaje,filaActual,columnaActual, Categoria.ERROR.toString()))
+    }
 
 }
