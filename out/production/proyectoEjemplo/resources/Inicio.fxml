@@ -6,7 +6,9 @@
 <AnchorPane prefHeight="593.0" prefWidth="677.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.uniquindio.compiladores.controladores.InicioController">
    <children>
       <Button fx:id="botonCambiar" layoutX="55.0" layoutY="75.0" mnemonicParsing="false" onAction="#analizarCodigo" text="Analizar Codigo" />
-      <TextArea fx:id="codigoFuente" layoutX="55.0" layoutY="125.0" prefHeight="200.0" prefWidth="597.0" />
+       <Button fx:id="btnLimpiar" layoutX="191.0" layoutY="75.0" mnemonicParsing="false" onAction="#limpiar" text="Limpiar" />
+      <TextArea fx:id="tablaCodigoFuente" layoutX="55.0" layoutY="125.0" prefHeight="200.0" prefWidth="597.0" />
+
       <TableView fx:id="tablaTokens" layoutX="55.0" layoutY="355.0" prefHeight="200.0" prefWidth="598.0">
         <columns>
           <TableColumn fx:id="colLexema" prefWidth="163.3999900817871" text="Lexema" />
@@ -18,5 +20,6 @@
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
          </columnResizePolicy>
       </TableView>
+
    </children>
 </AnchorPane>

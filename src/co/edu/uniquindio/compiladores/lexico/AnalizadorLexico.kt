@@ -87,6 +87,8 @@ class AnalizadorLexico(var codigoFuente:String) {
     }
 
     fun esEntero():Boolean{
+
+
         if (caracterActual.isDigit()){
 
             var lexema = ""
@@ -120,30 +122,39 @@ class AnalizadorLexico(var codigoFuente:String) {
 
     fun esIdentificador():Boolean {
 
-        if(caracterActual=='~'){
+
+
+        if(caracterActual=='$'){
             var lexema = ""
             var filaInicial=filaActual
             var columnaInicial=columnaActual
-
+            var longi=0
 
             lexema+=caracterActual
             obtenerSiguienteCaracter()
-            if(caracterActual.isLetter()){
-                do{
+            longi++
+            if(caracterActual == caracterActual.toLowerCase() ){
+                lexema += caracterActual
+                obtenerSiguienteCaracter()
+                longi ++
+
+                while (longi <= 10 && caracterActual == '$')
                     lexema += caracterActual
                     obtenerSiguienteCaracter()
-                }while (caracterActual != '~')
+                    longi ++
+
             }else{
                 lexema+=caracterActual
                 obtenerSiguienteCaracter()
                 almacenarToken(lexema, Categoria.DESCONOCIDO, filaInicial,columnaInicial);
                 return true
             }
-            lexema+=caracterActual
-            obtenerSiguienteCaracter()
-            almacenarToken(lexema, Categoria.IDENTIFICADOR, filaInicial, columnaInicial);
 
-            return true
+                lexema += caracterActual
+                obtenerSiguienteCaracter()
+                almacenarToken(lexema, Categoria.IDENTIFICADOR, filaInicial, columnaInicial);
+                return true
+
         }
         return false
     }
