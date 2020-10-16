@@ -85,6 +85,7 @@ class AnalizadorLexico(var codigoFuente:String) {
             if (finLinea())continue
 
             almacenarToken(""+caracterActual, Categoria.DESCONOCIDO, filaActual, columnaActual)
+            reportarError("Caracter desconocido, lexema: " + caracterActual)
             obtenerSiguienteCaracter()
 
         }
@@ -205,38 +206,19 @@ class AnalizadorLexico(var codigoFuente:String) {
             obtenerSiguienteCaracter()
 
             if(caracterActual+""=="'"){
-                lexema+=caracterActual
-                obtenerSiguienteCaracter()
-
-                if(caracterActual+""=="'") {
-                    hacerBT(posicionInicial,filaInicial,columnaInicial)
-                    return false
-                }
-
-                lexema+=caracterActual
-                obtenerSiguienteCaracter()
-
-                if(caracterActual+""=="'") {
-                    lexema += caracterActual
-                    obtenerSiguienteCaracter()
-
-                    if(caracterActual+""=="'") {
-                        lexema += caracterActual
-                        almacenarToken(lexema, Categoria.CARACTER, filaInicial, columnaInicial);
-                        obtenerSiguienteCaracter()
-                        return true
-                    }else{
-                        hacerBT(posicionInicial,filaInicial,columnaInicial)
-                        return false
-                    }
-                }else{
-                    hacerBT(posicionInicial,filaInicial,columnaInicial)
-                    return false
-                }
-            }else {
-                hacerBT(posicionInicial,filaInicial,columnaInicial)
+                hacerBT(posicionInicial, filaInicial, columnaInicial)
                 return false
             }
+            lexema += caracterActual
+            obtenerSiguienteCaracter()
+
+            if (caracterActual+"" == "'"){
+                almacenarToken(lexema, Categoria.CARACTER, filaInicial, columnaInicial)
+                obtenerSiguienteCaracter()
+                return true
+            }
+            hacerBT(posicionInicial, filaInicial, columnaInicial)
+            return false
         }
         return false
     }
