@@ -2,8 +2,6 @@ package co.edu.uniquindio.compiladores.lexico
 
 class AnalizadorLexico(var codigoFuente:String) {
 
-    //comentario de prueba
-    //segundo comentario
 
     var posicionActual = 0
     var caracterActual = codigoFuente[0]
@@ -145,6 +143,56 @@ class AnalizadorLexico(var codigoFuente:String) {
             almacenarToken(lexema, Categoria.IDENTIFICADOR, filaInicial, columnaInicial);
 
             return true
+        }
+        return false
+    }
+
+    /**
+     * Este metodo permite construir el token de caracter
+     */
+    fun esCaracter():Boolean{
+        if(caracterActual+""=="'"){
+            var lexema =""
+            var filaInicial=filaActual
+            var columnaInicial=columnaActual
+            var posicionInicial=posicionActual
+
+            lexema+=caracterActual
+            obtenerSiguienteCaracter()
+
+            if(caracterActual+""=="'"){
+                lexema+=caracterActual
+                obtenerSiguienteCaracter()
+
+                if(caracterActual+""=="'") {
+                    hacerBT(posicionInicial,filaInicial,columnaInicial)
+                    return false
+                }
+
+                lexema+=caracterActual
+                obtenerSiguienteCaracter()
+
+                if(caracterActual+""=="'") {
+                    lexema += caracterActual
+                    obtenerSiguienteCaracter()
+
+                    if(caracterActual+""=="'") {
+                        lexema += caracterActual
+                        almacenarToken(lexema, Categoria.CARACTER, filaInicial, columnaInicial);
+                        obtenerSiguienteCaracter()
+                        return true
+                    }else{
+                        hacerBT(posicionInicial,filaInicial,columnaInicial)
+                        return false
+                    }
+                }else{
+                    hacerBT(posicionInicial,filaInicial,columnaInicial)
+                    return false
+                }
+            }else {
+                hacerBT(posicionInicial,filaInicial,columnaInicial)
+                return false
+            }
         }
         return false
     }
