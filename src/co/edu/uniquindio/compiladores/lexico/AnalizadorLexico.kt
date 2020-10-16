@@ -11,19 +11,19 @@ class AnalizadorLexico(var codigoFuente:String) {
     var columnaActual = 0
     val operadoresAritmeticos = ArrayList<Char>()
     var listaErrores = ArrayList<Error>()
-    var palabrasRes=ArrayList<String>()
+    var palabrasRes = ArrayList<String>()
 
 
-    fun almacenarToken(lexema:String, categoria: Categoria, fila:Int, columna:Int) = listaTokens.add(Token(lexema, categoria, fila, columna))
+    fun almacenarToken(lexema: String, categoria: Categoria, fila: Int, columna: Int) = listaTokens.add(Token(lexema, categoria, fila, columna))
 
-    fun hacerBT(posicionInicial:Int, filaInicial:Int, columnaInicial:Int){
+    fun hacerBT(posicionInicial: Int, filaInicial: Int, columnaInicial: Int) {
         posicionActual = posicionInicial
         filaActual = filaInicial
         columnaActual = filaInicial
         caracterActual = codigoFuente[posicionActual]
     }
 
-    fun analizar(){
+    fun analizar() {
 
         operadoresAritmeticos.add('+')
         operadoresAritmeticos.add('-')
@@ -60,9 +60,9 @@ class AnalizadorLexico(var codigoFuente:String) {
         palabrasRes.add("obtain")
 
 
-        while(caracterActual != finCodigo){
+        while (caracterActual != finCodigo) {
 
-            if (caracterActual == ' ' || caracterActual == '\t' || caracterActual == '\n'){
+            if (caracterActual == ' ' || caracterActual == '\t' || caracterActual == '\n') {
                 obtenerSiguienteCaracter()
                 continue
             }
@@ -70,46 +70,46 @@ class AnalizadorLexico(var codigoFuente:String) {
             if (esEntero()) continue
             if (esDecimal()) continue
             if (esIdentificador()) continue
-            if (esCaracter())continue
+            if (esCaracter()) continue
             if (esCadena()) continue
             if (esAgrupador()) continue
             if (esComentarioBloque()) continue
             if (esComentarioLinea()) continue
             if (esOperadorAsignacion()) continue
             if (esOperadorIncremento()) continue
-            if (esOperadorLogico() ) continue
+            if (esOperadorLogico()) continue
             if (esOperadorMatematico()) continue
             if (esOperadorRelacional()) continue
-            if (esSeparador())continue
+            if (esSeparador()) continue
             if (esPalabraReservada()) continue
-            if (finLinea())continue
+            if (finLinea()) continue
 
-            almacenarToken(""+caracterActual, Categoria.DESCONOCIDO, filaActual, columnaActual)
+            almacenarToken("" + caracterActual, Categoria.DESCONOCIDO, filaActual, columnaActual)
             reportarError("Caracter desconocido, lexema: " + caracterActual)
             obtenerSiguienteCaracter()
 
         }
     }
 
-    fun esDecimal():Boolean{
-        if (caracterActual == '.' || caracterActual.isDigit()){
+    fun esDecimal(): Boolean {
+        if (caracterActual == '.' || caracterActual.isDigit()) {
             var lexema = ""
             var filaInicial = filaActual
             var columnaInicial = columnaActual
 
-            if (caracterActual == '.'){
+            if (caracterActual == '.') {
                 lexema += caracterActual
                 obtenerSiguienteCaracter()
-                if (caracterActual.isDigit()){
+                if (caracterActual.isDigit()) {
                     lexema += caracterActual
                     obtenerSiguienteCaracter()
 
                 }
-            }else{
+            } else {
                 lexema += caracterActual
                 obtenerSiguienteCaracter()
 
-                while (caracterActual.isDigit()){
+                while (caracterActual.isDigit()) {
                     lexema += caracterActual
                     obtenerSiguienteCaracter()
                 }
@@ -119,7 +119,7 @@ class AnalizadorLexico(var codigoFuente:String) {
                 }
 
             }
-            while (caracterActual.isDigit()){
+            while (caracterActual.isDigit()) {
                 lexema += caracterActual
                 obtenerSiguienteCaracter()
             }
@@ -130,10 +130,13 @@ class AnalizadorLexico(var codigoFuente:String) {
         return false
     }
 
-    fun esEntero():Boolean{
+    /**
+     *
+     */
+    fun esEntero(): Boolean {
 
 
-        if (caracterActual.isDigit()){
+        if (caracterActual.isDigit()) {
 
             var lexema = ""
             var filaInicial = filaActual
@@ -143,12 +146,12 @@ class AnalizadorLexico(var codigoFuente:String) {
             lexema += caracterActual
             obtenerSiguienteCaracter()
 
-            while (caracterActual.isDigit()){
+            while (caracterActual.isDigit()) {
                 lexema += caracterActual
                 obtenerSiguienteCaracter()
             }
 
-            if (caracterActual == '.'){
+            if (caracterActual == '.') {
                 hacerBT(posicionInicial, filaInicial, columnaInicial)
                 return false
             }
@@ -159,14 +162,49 @@ class AnalizadorLexico(var codigoFuente:String) {
         return false
     }
 
+    /**
+     *
+     */
+    fun esIdentificador(): Boolean {
+
+
+
+        if (caracterActual == '$') {
+
+            var lexema = ""
+            var filaInicial = filaActual
+            var columnaInicial = columnaActual
+            var posicionInicial = posicionActual
+
+
+            lexema += caracterActual
+            obtenerSiguienteCaracter()
+
+            if (caracterActual.isLowerCase()  ) {
+
+                while (caracterActual != '$' && lexema.length < 9  ) {
+                    lexema += caracterActual
+                    obtenerSiguienteCaracter()
+                }
+            } else {
+                lexema+= caracterActual
+                almacenarToken(lexema, Categoria.ERROR, filaInicial, columnaInicial)
+                return false
+            }
+            lexema+= caracterActual
+            almacenarToken(lexema, Categoria.IDENTIFICADOR, filaInicial, columnaInicial)
+            return true
+        }
+
+        return false
+    }
+
 
     /**
      * este metodo permite la validacón del token Identificadores
      */
-
+/*
     fun esIdentificador():Boolean {
-
-
 
         if(caracterActual=='$'){
             var lexema = ""
@@ -177,31 +215,42 @@ class AnalizadorLexico(var codigoFuente:String) {
             lexema+=caracterActual
             obtenerSiguienteCaracter()
             longi++
-            if(caracterActual == caracterActual.toLowerCase() ){
+            if(!caracterActual.isDigit()){
+                if(caracterActual.isLowerCase()){
+                    if(lexema.length<10){
+
+
                 lexema += caracterActual
                 obtenerSiguienteCaracter()
                 longi ++
 
-                while (longi <= 10 && caracterActual == '$')
+                while ( lexema.length<10 && caracterActual != '$') {
                     lexema += caracterActual
                     obtenerSiguienteCaracter()
-                    longi ++
+                    longi++
+                    }
 
-            }else{
-                lexema+=caracterActual
-                obtenerSiguienteCaracter()
-                almacenarToken(lexema, Categoria.DESCONOCIDO, filaInicial,columnaInicial);
-                return true
-            }
 
                 lexema += caracterActual
                 obtenerSiguienteCaracter()
                 almacenarToken(lexema, Categoria.IDENTIFICADOR, filaInicial, columnaInicial);
                 return true
+                        }
+                    }
+            }else{
+
+                    lexema += caracterActual
+                    obtenerSiguienteCaracter()
+                    almacenarToken(lexema, Categoria.ERROR, filaInicial, columnaInicial);
+                    return true
+                    }
+
 
         }
         return false
     }
+    */
+
 
     /**
      * Este metodo permite construir el token de caracter
@@ -224,11 +273,12 @@ class AnalizadorLexico(var codigoFuente:String) {
             obtenerSiguienteCaracter()
 
             if (caracterActual+"" == "'"){
+                lexema+=caracterActual
                 almacenarToken(lexema, Categoria.CARACTER, filaInicial, columnaInicial)
                 obtenerSiguienteCaracter()
                 return true
             }
-            hacerBT(posicionInicial, filaInicial, columnaInicial)
+           // hacerBT(posicionInicial, filaInicial, columnaInicial)
             return false
         }
         return false
@@ -323,16 +373,18 @@ class AnalizadorLexico(var codigoFuente:String) {
             var filaInicial = filaActual
             var columnaInicial = columnaActual
             var posicionInicial = posicionActual
+            var palabra = ""
 
             lexema += caracterActual
             obtenerSiguienteCaracter()
 
-            while (caracterActual.isLetter()) {
+            while (caracterActual.isLetter() ) {
+                    palabra+=caracterActual
                     lexema += caracterActual
                     obtenerSiguienteCaracter()
             }
 
-            if (palabrasRes.contains(lexema.toLowerCase())) {
+            if (palabrasRes.contains(palabra.toLowerCase())) {
                 almacenarToken(lexema, Categoria.PALABRA_RESERVADA, filaInicial, columnaInicial)
                 return true
             }
@@ -389,7 +441,7 @@ class AnalizadorLexico(var codigoFuente:String) {
             lexema+=caracterActual
             obtenerSiguienteCaracter()
 
-            while (caracterActual!='"'){
+            while (caracterActual!='"' ){
                 lexema+=caracterActual
                 obtenerSiguienteCaracter()
             }
@@ -398,12 +450,18 @@ class AnalizadorLexico(var codigoFuente:String) {
                 obtenerSiguienteCaracter()
                 almacenarToken(lexema, Categoria.CADENA, filaInicial, columnaInicial);
                 return true
-
             }
-
+            else {
+                lexema+= caracterActual
+                almacenarToken(lexema, Categoria.DESCONOCIDO, filaInicial, columnaInicial)
+                return false
+                }
         }
+
         return false
     }
+
+
 
     /**
      * Este metodo permite construir el token de operador matematico
