@@ -53,6 +53,10 @@ class InicioController : Initializable {
 
     }
 
+    /**
+     * ESTE metodo reflejar en la tabla la especificacion de cada uno de los tokens
+     */
+
     override  fun initialize(primaryStage: URL?, p1:ResourceBundle?){
         colLexema.cellValueFactory=PropertyValueFactory(  "lexema")
         colCategoria.cellValueFactory=PropertyValueFactory( "categoria")

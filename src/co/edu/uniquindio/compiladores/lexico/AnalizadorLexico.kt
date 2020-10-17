@@ -23,6 +23,9 @@ class AnalizadorLexico(var codigoFuente:String) {
         caracterActual = codigoFuente[posicionActual]
     }
 
+    /**
+     * funcion principal que permite analizar y isntanciar cada uno de las funciones respecto a la identificacion de tokens
+     */
     fun analizar() {
 
         operadoresAritmeticos.add('+')
@@ -78,7 +81,7 @@ class AnalizadorLexico(var codigoFuente:String) {
             if (esOperadorAsignacion()) continue
             if (esOperadorIncremento()) continue
             if (esOperadorLogico()) continue
-            if (esOperadorMatematico()) continue
+            if (esOperadorAritmeticos()) continue
             if (esOperadorRelacional()) continue
             if (esSeparador()) continue
             if (esPalabraReservada()) continue
@@ -91,6 +94,9 @@ class AnalizadorLexico(var codigoFuente:String) {
         }
     }
 
+    /**
+     * metodo que permite identificar los numeros decimales
+     */
     fun esDecimal(): Boolean {
         if (caracterActual == '.' || caracterActual.isDigit()) {
             var lexema = ""
@@ -131,7 +137,7 @@ class AnalizadorLexico(var codigoFuente:String) {
     }
 
     /**
-     *
+     *metodo que permite reconocer los numeros enteros
      */
     fun esEntero(): Boolean {
 
@@ -163,10 +169,9 @@ class AnalizadorLexico(var codigoFuente:String) {
     }
 
     /**
-     *
+     *este metodo permite la validacón del token Identificadores
      */
     fun esIdentificador(): Boolean {
-
 
 
         if (caracterActual == '$') {
@@ -175,6 +180,7 @@ class AnalizadorLexico(var codigoFuente:String) {
             var filaInicial = filaActual
             var columnaInicial = columnaActual
             var posicionInicial = posicionActual
+            var new = ""
 
 
             lexema += caracterActual
@@ -185,71 +191,25 @@ class AnalizadorLexico(var codigoFuente:String) {
                 while (caracterActual != '$' && lexema.length < 9  ) {
                     lexema += caracterActual
                     obtenerSiguienteCaracter()
+
                 }
-            } else {
-                lexema+= caracterActual
-                almacenarToken(lexema, Categoria.ERROR, filaInicial, columnaInicial)
-                return false
-            }
-            lexema+= caracterActual
-            almacenarToken(lexema, Categoria.IDENTIFICADOR, filaInicial, columnaInicial)
-            return true
-        }
 
-        return false
-    }
-
-
-    /**
-     * este metodo permite la validacón del token Identificadores
-     */
-/*
-    fun esIdentificador():Boolean {
-
-        if(caracterActual=='$'){
-            var lexema = ""
-            var filaInicial=filaActual
-            var columnaInicial=columnaActual
-            var longi=0
-
-            lexema+=caracterActual
-            obtenerSiguienteCaracter()
-            longi++
-            if(!caracterActual.isDigit()){
-                if(caracterActual.isLowerCase()){
-                    if(lexema.length<10){
-
-
-                lexema += caracterActual
-                obtenerSiguienteCaracter()
-                longi ++
-
-                while ( lexema.length<10 && caracterActual != '$') {
+                if (caracterActual=='$') {
                     lexema += caracterActual
-                    obtenerSiguienteCaracter()
-                    longi++
-                    }
-
-
-                lexema += caracterActual
-                obtenerSiguienteCaracter()
-                almacenarToken(lexema, Categoria.IDENTIFICADOR, filaInicial, columnaInicial);
-                return true
-                        }
-                    }
-            }else{
-
-                    lexema += caracterActual
-                    obtenerSiguienteCaracter()
-                    almacenarToken(lexema, Categoria.ERROR, filaInicial, columnaInicial);
+                    almacenarToken(lexema, Categoria.IDENTIFICADOR, filaInicial, columnaInicial)
                     return true
-                    }
+                }
 
+            }
+            lexema += caracterActual
+            almacenarToken( lexema, Categoria.ERROR, filaInicial, columnaInicial)
 
         }
+
         return false
     }
-    */
+
+
 
 
     /**
@@ -412,7 +372,7 @@ class AnalizadorLexico(var codigoFuente:String) {
             return true
         }
 
-        if(caracterActual=='.'){
+        if(caracterActual=='°'){
             lexema+=caracterActual
             obtenerSiguienteCaracter()
             almacenarToken(lexema, Categoria.PUNTO, filaInicial, columnaInicial);
@@ -433,40 +393,38 @@ class AnalizadorLexico(var codigoFuente:String) {
      * Este metodo permite construir el token de cadena
      */
     fun esCadena():Boolean{
-        if(caracterActual=='"'){
-            var lexema =""
-            var filaInicial=filaActual
-            var columnaInicial=columnaActual
-            var posicionInicial=posicionActual
-            lexema+=caracterActual
+
+        if(caracterActual=='"') {
+            var lexema = ""
+            var filaInicial = filaActual
+            var columnaInicial = columnaActual
+
+
+            lexema += caracterActual
             obtenerSiguienteCaracter()
 
-            while (caracterActual!='"' ){
-                lexema+=caracterActual
-                obtenerSiguienteCaracter()
-            }
-            if (caracterActual=='"') {
-                lexema+=caracterActual
-                obtenerSiguienteCaracter()
-                almacenarToken(lexema, Categoria.CADENA, filaInicial, columnaInicial);
-                return true
-            }
-            else {
-                lexema+= caracterActual
-                almacenarToken(lexema, Categoria.DESCONOCIDO, filaInicial, columnaInicial)
-                return false
+                while (caracterActual != '"') {
+                    lexema += caracterActual
+                    obtenerSiguienteCaracter()
                 }
-        }
+                if (caracterActual == '"') {
+                    lexema += caracterActual
+                    obtenerSiguienteCaracter()
+                    almacenarToken(lexema, Categoria.CADENA, filaInicial, columnaInicial);
+                    return true
+                }
 
+        }
         return false
     }
 
 
 
+
     /**
-     * Este metodo permite construir el token de operador matematico
+     * Este metodo permite construir el token de operadores aritmeticos
      */
-    fun esOperadorMatematico():Boolean{
+    fun esOperadorAritmeticos():Boolean{
 
         var lexema =""
         var filaInicial=filaActual
@@ -623,11 +581,13 @@ class AnalizadorLexico(var codigoFuente:String) {
 
             obtenerSiguienteCaracter()
 
-            while (caracterActual!='\n'){
+
+            while (caracterActual != '?'){
                   lexema+=caracterActual
                   obtenerSiguienteCaracter()
             }
 
+            lexema+=caracterActual
             almacenarToken(lexema,Categoria.COMENTARIO_LINEA,filaInicial,columnaInicial);
             obtenerSiguienteCaracter()
             return true
@@ -662,6 +622,10 @@ class AnalizadorLexico(var codigoFuente:String) {
         }
         return false
     }
+
+    /**
+     * este metodo nos permite ir recorriendo y obteniendo el siguiente caracter
+     */
 
     fun obtenerSiguienteCaracter(){
         if (posicionActual == codigoFuente.length-1){
