@@ -167,8 +167,6 @@ class AnalizadorLexico(var codigoFuente:String) {
      */
     fun esIdentificador(): Boolean {
 
-
-
         if (caracterActual == '$') {
 
             var lexema = ""
@@ -186,14 +184,19 @@ class AnalizadorLexico(var codigoFuente:String) {
                     lexema += caracterActual
                     obtenerSiguienteCaracter()
                 }
+
+                if (caracterActual == '$'){
+                    lexema+= caracterActual
+                    almacenarToken(lexema, Categoria.IDENTIFICADOR, filaInicial, columnaInicial)
+                    return true
+                }
+
             } else {
                 lexema+= caracterActual
                 almacenarToken(lexema, Categoria.ERROR, filaInicial, columnaInicial)
                 return false
             }
-            lexema+= caracterActual
-            almacenarToken(lexema, Categoria.IDENTIFICADOR, filaInicial, columnaInicial)
-            return true
+
         }
 
         return false
@@ -448,14 +451,11 @@ class AnalizadorLexico(var codigoFuente:String) {
             if (caracterActual=='"') {
                 lexema+=caracterActual
                 obtenerSiguienteCaracter()
-                almacenarToken(lexema, Categoria.CADENA, filaInicial, columnaInicial);
+                almacenarToken(lexema, Categoria.CADENA, filaInicial, columnaInicial)
                 return true
             }
-            else {
-                lexema+= caracterActual
-                almacenarToken(lexema, Categoria.DESCONOCIDO, filaInicial, columnaInicial)
-                return false
-                }
+            almacenarToken(lexema, Categoria.DESCONOCIDO, filaInicial, columnaInicial)
+            return false
         }
 
         return false
