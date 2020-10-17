@@ -173,10 +173,6 @@ class AnalizadorLexico(var codigoFuente:String) {
      */
     fun esIdentificador(): Boolean {
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 9b10ee65ca50758fb8dd6de0154be8fb90caa35e
         if (caracterActual == '$') {
 
             var lexema = ""
@@ -194,8 +190,7 @@ class AnalizadorLexico(var codigoFuente:String) {
                 while (caracterActual != '$' && lexema.length < 9  ) {
                     lexema += caracterActual
                     obtenerSiguienteCaracter()
-<<<<<<< HEAD
-=======
+
                 }
 
                 if (caracterActual == '$'){
@@ -204,67 +199,13 @@ class AnalizadorLexico(var codigoFuente:String) {
                     return true
                 }
 
-            } else {
-                lexema+= caracterActual
-                almacenarToken(lexema, Categoria.ERROR, filaInicial, columnaInicial)
-                return false
             }
-
-        }
-
-        return false
-    }
-
-
-    /**
-     * este metodo permite la validacón del token Identificadores
-     */
-/*
-    fun esIdentificador():Boolean {
-
-        if(caracterActual=='$'){
-            var lexema = ""
-            var filaInicial=filaActual
-            var columnaInicial=columnaActual
-            var longi=0
-
-            lexema+=caracterActual
-            obtenerSiguienteCaracter()
-            longi++
-            if(!caracterActual.isDigit()){
-                if(caracterActual.isLowerCase()){
-                    if(lexema.length<10){
-
-
                 lexema += caracterActual
-                obtenerSiguienteCaracter()
-                longi ++
-
-                while ( lexema.length<10 && caracterActual != '$') {
-                    lexema += caracterActual
-                    obtenerSiguienteCaracter()
-                    longi++
-                    }
-
->>>>>>> 9b10ee65ca50758fb8dd6de0154be8fb90caa35e
-
-                }
-
-                if (caracterActual=='$') {
-                    lexema += caracterActual
-                    almacenarToken(lexema, Categoria.IDENTIFICADOR, filaInicial, columnaInicial)
-                    return true
-                }
-
+                almacenarToken( lexema, Categoria.ERROR, filaInicial, columnaInicial)
             }
-            lexema += caracterActual
-            almacenarToken( lexema, Categoria.ERROR, filaInicial, columnaInicial)
-
-        }
 
         return false
     }
-
 
 
 
@@ -294,7 +235,7 @@ class AnalizadorLexico(var codigoFuente:String) {
                 obtenerSiguienteCaracter()
                 return true
             }
-           // hacerBT(posicionInicial, filaInicial, columnaInicial)
+
             return false
         }
         return false
@@ -404,7 +345,7 @@ class AnalizadorLexico(var codigoFuente:String) {
                 almacenarToken(lexema, Categoria.PALABRA_RESERVADA, filaInicial, columnaInicial)
                 return true
             }
-            almacenarToken(lexema, Categoria.DESCONOCIDO, filaInicial, columnaInicial)
+            almacenarToken(lexema, Categoria.ERROR, filaInicial, columnaInicial)
             reportarError("La palabra despues del signo ~ no es una palabra reservada")
             return false
         }
@@ -459,7 +400,7 @@ class AnalizadorLexico(var codigoFuente:String) {
             lexema += caracterActual
             obtenerSiguienteCaracter()
 
-<<<<<<< HEAD
+
                 while (caracterActual != '"') {
                     lexema += caracterActual
                     obtenerSiguienteCaracter()
@@ -470,23 +411,10 @@ class AnalizadorLexico(var codigoFuente:String) {
                     almacenarToken(lexema, Categoria.CADENA, filaInicial, columnaInicial);
                     return true
                 }
-=======
-            while (caracterActual!='"' ){
-                lexema+=caracterActual
-                obtenerSiguienteCaracter()
-            }
-            if (caracterActual=='"') {
-                lexema+=caracterActual
-                obtenerSiguienteCaracter()
-                almacenarToken(lexema, Categoria.CADENA, filaInicial, columnaInicial)
-                return true
-            }
-            almacenarToken(lexema, Categoria.DESCONOCIDO, filaInicial, columnaInicial)
-            return false
-        }
->>>>>>> 9b10ee65ca50758fb8dd6de0154be8fb90caa35e
+
 
         }
+
         return false
     }
 
