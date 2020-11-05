@@ -3,7 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="593.0" prefWidth="677.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.uniquindio.compiladores.controladores.InicioController">
+<AnchorPane prefHeight="595.0" prefWidth="1057.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.uniquindio.compiladores.controladores.InicioController">
    <children>
       <Button fx:id="botonCambiar" layoutX="55.0" layoutY="75.0" mnemonicParsing="false" onAction="#analizarCodigo" text="Analizar Codigo" />
        <Button fx:id="btnLimpiar" layoutX="191.0" layoutY="75.0" mnemonicParsing="false" onAction="#limpiar" text="Limpiar" />
@@ -20,6 +20,7 @@
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
          </columnResizePolicy>
       </TableView>
-
+      <TreeView fx:id="arbolVisual" layoutX="701.0" layoutY="125.0" prefHeight="430.0" prefWidth="330.0" />
+        
    </children>
 </AnchorPane>

@@ -46,6 +46,10 @@ class AnalizadorLexico(var codigoFuente:String) {
         palabrasRes.add("float")
         palabrasRes.add("long")
         palabrasRes.add("duplex")
+        palabrasRes.add("ente")
+        palabrasRes.add("cade")
+        palabrasRes.add("car")
+        palabrasRes.add("not")
         palabrasRes.add("time")
         palabrasRes.add("by")
         palabrasRes.add("open")
@@ -171,7 +175,7 @@ class AnalizadorLexico(var codigoFuente:String) {
     /**
      *este metodo permite la validacón del token Identificadores
      */
-    fun esIdentificador(): Boolean {
+   /**fun esIdentificador(): Boolean {
 
         if (caracterActual == '$') {
 
@@ -205,7 +209,35 @@ class AnalizadorLexico(var codigoFuente:String) {
             }
 
         return false
-    }
+    }*/
+
+
+
+   fun esIdentificador(): Boolean {
+
+
+       if (caracterActual.isLowerCase()) {
+
+           var lexema = ""
+           var filaInicial = filaActual
+           var columnaInicial = columnaActual
+           var posicionInicial = posicionActual
+           var new = ""
+
+
+           lexema += caracterActual
+           obtenerSiguienteCaracter()
+
+
+
+                   lexema += caracterActual
+                   almacenarToken(lexema, Categoria.IDENTIFICADOR, filaInicial, columnaInicial)
+                   return true
+
+           }
+
+       return false
+   }
 
 
 
@@ -648,7 +680,7 @@ class AnalizadorLexico(var codigoFuente:String) {
      * Este metodo permite agregar un error a la lista de errores
      */
     fun reportarError( mensaje:String){
-        listaErrores.add(Error(mensaje,filaActual,columnaActual, Categoria.ERROR.toString()))
+        listaErrores.add(Error(mensaje,filaActual,columnaActual))
     }
 
 }
