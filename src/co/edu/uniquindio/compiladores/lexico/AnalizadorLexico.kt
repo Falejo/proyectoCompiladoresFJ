@@ -65,6 +65,9 @@ class AnalizadorLexico(var codigoFuente:String) {
         palabrasRes.add("pack")
         palabrasRes.add("bring")
         palabrasRes.add("obtain")
+        palabrasRes.add("read")
+        palabrasRes.add("print")
+        palabrasRes.add("back")
 
 
         while (caracterActual != finCodigo) {
@@ -175,7 +178,7 @@ class AnalizadorLexico(var codigoFuente:String) {
     /**
      *este metodo permite la validacón del token Identificadores
      */
-   /**fun esIdentificador(): Boolean {
+    fun esIdentificador(): Boolean {
 
         if (caracterActual == '$') {
 
@@ -183,7 +186,6 @@ class AnalizadorLexico(var codigoFuente:String) {
             var filaInicial = filaActual
             var columnaInicial = columnaActual
             var posicionInicial = posicionActual
-            var new = ""
 
 
             lexema += caracterActual
@@ -194,52 +196,23 @@ class AnalizadorLexico(var codigoFuente:String) {
                 while (caracterActual != '$' && lexema.length < 9  ) {
                     lexema += caracterActual
                     obtenerSiguienteCaracter()
-
                 }
 
                 if (caracterActual == '$'){
                     lexema+= caracterActual
                     almacenarToken(lexema, Categoria.IDENTIFICADOR, filaInicial, columnaInicial)
+                    obtenerSiguienteCaracter()
                     return true
                 }
 
             }
-                lexema += caracterActual
-                almacenarToken( lexema, Categoria.ERROR, filaInicial, columnaInicial)
-            }
+            lexema += caracterActual
+            almacenarToken( lexema, Categoria.ERROR, filaInicial, columnaInicial)
+            obtenerSiguienteCaracter()
+        }
 
         return false
-    }*/
-
-
-
-   fun esIdentificador(): Boolean {
-
-
-       if (caracterActual.isLowerCase()) {
-
-           var lexema = ""
-           var filaInicial = filaActual
-           var columnaInicial = columnaActual
-           var posicionInicial = posicionActual
-           var new = ""
-
-
-           lexema += caracterActual
-           obtenerSiguienteCaracter()
-
-
-
-                   lexema += caracterActual
-                   almacenarToken(lexema, Categoria.IDENTIFICADOR, filaInicial, columnaInicial)
-                   return true
-
-           }
-
-       return false
-   }
-
-
+    }
 
     /**
      * Este metodo permite construir el token de caracter
@@ -368,9 +341,9 @@ class AnalizadorLexico(var codigoFuente:String) {
             obtenerSiguienteCaracter()
 
             while (caracterActual.isLetter() ) {
-                    palabra+=caracterActual
-                    lexema += caracterActual
-                    obtenerSiguienteCaracter()
+                palabra+=caracterActual
+                lexema += caracterActual
+                obtenerSiguienteCaracter()
             }
 
             if (palabrasRes.contains(palabra.toLowerCase())) {
@@ -433,16 +406,16 @@ class AnalizadorLexico(var codigoFuente:String) {
             obtenerSiguienteCaracter()
 
 
-                while (caracterActual != '"') {
-                    lexema += caracterActual
-                    obtenerSiguienteCaracter()
-                }
-                if (caracterActual == '"') {
-                    lexema += caracterActual
-                    obtenerSiguienteCaracter()
-                    almacenarToken(lexema, Categoria.CADENA, filaInicial, columnaInicial);
-                    return true
-                }
+            while (caracterActual != '"') {
+                lexema += caracterActual
+                obtenerSiguienteCaracter()
+            }
+            if (caracterActual == '"') {
+                lexema += caracterActual
+                obtenerSiguienteCaracter()
+                almacenarToken(lexema, Categoria.CADENA, filaInicial, columnaInicial);
+                return true
+            }
 
 
         }
@@ -615,8 +588,8 @@ class AnalizadorLexico(var codigoFuente:String) {
 
 
             while (caracterActual != '?'){
-                  lexema+=caracterActual
-                  obtenerSiguienteCaracter()
+                lexema+=caracterActual
+                obtenerSiguienteCaracter()
             }
 
             lexema+=caracterActual
