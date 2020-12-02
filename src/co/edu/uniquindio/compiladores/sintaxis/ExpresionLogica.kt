@@ -1,7 +1,9 @@
 package co.edu.uniquindio.compiladores.sintaxis
 
 import co.edu.uniquindio.compiladores.lexico.Token
+import co.edu.uniquindio.compiladores.semantica.TablaSimbolos
 import javafx.scene.control.TreeItem
+import co.edu.uniquindio.compiladores.lexico.Error
 
 class ExpresionLogica() : Expresion() {
     var expresionRelacional:ExpresionRelacional?=null
@@ -30,6 +32,13 @@ class ExpresionLogica() : Expresion() {
         }
 
         return raiz
+    }
+
+    /**
+     *
+     */
+    override fun obtenerTipo(tablaSimbolos: TablaSimbolos, ambito:String,listaErrores:ArrayList<Error>):String{
+        return "~istf"
     }
 
 }

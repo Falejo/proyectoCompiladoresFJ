@@ -1,7 +1,9 @@
 package co.edu.uniquindio.compiladores.sintaxis
 
 import co.edu.uniquindio.compiladores.lexico.Token
+import co.edu.uniquindio.compiladores.semantica.TablaSimbolos
 import javafx.scene.control.TreeItem
+import co.edu.uniquindio.compiladores.lexico.Error
 
 class ExpresionRelacional(var expresion1:Expresion,var operadorRelacional:Token,var expresion2:Expresion ):Expresion() {
     override fun toString(): String {
@@ -16,4 +18,10 @@ class ExpresionRelacional(var expresion1:Expresion,var operadorRelacional:Token,
         return raiz
     }
 
+    /**
+     *
+     */
+    override fun obtenerTipo(tablaSimbolos: TablaSimbolos, ambito:String, listaErrores:ArrayList<Error>):String{
+        return "~istf"
+    }
 }

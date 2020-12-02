@@ -1,5 +1,7 @@
 package co.edu.uniquindio.compiladores.sintaxis
 
+import co.edu.uniquindio.compiladores.lexico.Error
+import co.edu.uniquindio.compiladores.semantica.TablaSimbolos
 import javafx.scene.control.TreeItem
 
 class Decision(var expresionLogica:ExpresionLogica, var listaSentencia:ArrayList<Sentencia>, var listaSentenciaElse: ArrayList<Sentencia>?): Sentencia() {
@@ -19,22 +21,39 @@ class Decision(var expresionLogica:ExpresionLogica, var listaSentencia:ArrayList
 
         var raizTrue = TreeItem("Sentencias Verdaderas")
 
-        for (s in listaSentencia){
+        for (s in listaSentencia) {
             raizTrue.children.add(s.getArbolVisual())
         }
 
         raiz.children.add(raizTrue)
 
-        if(listaSentenciaElse!=null) {
+        if (listaSentenciaElse != null) {
 
-        var raizFalse = TreeItem("Sentencias falsas")
+            var raizFalse = TreeItem("Sentencias falsas")
 
-        for (s in listaSentenciaElse!!){
-            raizFalse.children.add(s.getArbolVisual())
-         }
+            for (s in listaSentenciaElse!!) {
+                raizFalse.children.add(s.getArbolVisual())
+            }
             raiz.children.add(raizFalse)
         }
 
         return raiz
+    }
+
+    /**
+     *
+     */
+    override fun llenarTablaSimbolos(tablaSimbolos: TablaSimbolos, listaErrores: ArrayList<Error>, ambito: String) {
+
+    for (s in listaSentencia!!){
+        s.llenarTablaSimbolos(tablaSimbolos,listaErrores,ambito)
+     }
+
+
+    if (listaSentenciaElse!=null){
+        for (sElse in listaSentenciaElse!!){
+            sElse.llenarTablaSimbolos(tablaSimbolos,listaErrores,ambito)
+        }
+    }
     }
 }

@@ -1,6 +1,8 @@
 package co.edu.uniquindio.compiladores.sintaxis
 
+import co.edu.uniquindio.compiladores.lexico.Error
 import co.edu.uniquindio.compiladores.lexico.Token
+import co.edu.uniquindio.compiladores.semantica.TablaSimbolos
 import javafx.scene.control.TreeItem
 
 class Declaracion(var modAcceso:Token?,var tipoDato:Token, var nombre:Token,var asignacion:Asignacion?):Sentencia() {
@@ -19,4 +21,23 @@ class Declaracion(var modAcceso:Token?,var tipoDato:Token, var nombre:Token,var 
 
         return raiz
     }
+
+    /**
+     *
+     */
+    override fun llenarTablaSimbolos(tablaSimbolos: TablaSimbolos, listaErrores: ArrayList<Error>, ambito: String) {
+        var acceso=""
+        if (modAcceso!=null) acceso=modAcceso!!.lexema
+        tablaSimbolos.guardarSimboloValor(nombre.lexema,tipoDato.lexema,true,ambito,nombre.fila,nombre.columna)
+    }
+
+    /**
+     *
+     */
+    override fun analizarSemantica(tablaSimbolos: TablaSimbolos, erroresSemanticos: ArrayList<Error>, ambito: String) {
+        if (asignacion != null){
+            asignacion!!.analizarSemantica(tablaSimbolos, erroresSemanticos, ambito)
+        }
+    }
+
 }

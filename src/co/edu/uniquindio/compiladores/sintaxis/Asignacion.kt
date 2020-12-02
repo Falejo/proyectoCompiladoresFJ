@@ -1,7 +1,10 @@
 package co.edu.uniquindio.compiladores.sintaxis
 
 import co.edu.uniquindio.compiladores.lexico.Token
+import co.edu.uniquindio.compiladores.semantica.Simbolo
+import co.edu.uniquindio.compiladores.semantica.TablaSimbolos
 import javafx.scene.control.TreeItem
+import co.edu.uniquindio.compiladores.lexico.Error
 
 class Asignacion(): Sentencia() {
     var nombre:Token?=null
@@ -41,6 +44,35 @@ class Asignacion(): Sentencia() {
         }
 
         return raiz
+    }
+
+    /**
+     *
+     */
+    override fun analizarSemantica(tablaSimbolos: TablaSimbolos, listaErrores: ArrayList<Error>, ambito: String) {
+        var simb: Simbolo?=null
+        if (nombre != null) {
+            simb = tablaSimbolos.buscarSimboloValor(nombre!!.lexema, ambito)
+        }
+        if (simb == null){
+
+            listaErrores.add(Error("El campo ${nombre!!.lexema} no existe en el ambito $ambito",nombre!!.fila, nombre!!.columna,""))
+
+        }else{
+            var tipo=simb.tipo
+
+            if (expresion != null){
+                expresion!!.analizarSemantica(tablaSimbolos, listaErrores, ambito)
+                var tipoExp =expresion!!.obtenerTipo(tablaSimbolos, ambito, listaErrores)
+
+                if (tipoExp != tipo ){
+                    listaErrores.add(Error("El tipo de dato de la expresion ${tipoExp} no coincide con el tipo de dato del campo " +
+                            "${nombre!!.lexema} que es de tipo $tipo", nombre!!.fila,nombre!!.columna,""))
+                }
+
+            }
+
+        }
     }
 
 }

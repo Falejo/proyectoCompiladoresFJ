@@ -3,10 +3,10 @@ package co.edu.uniquindio.compiladores.sintaxis
 import co.edu.uniquindio.compiladores.lexico.Token
 import javafx.scene.control.TreeItem
 
-class Parametro( var nombre: Token, var tipoDato:Token) {
+class Parametro( var tipoDato:Token, var nombre: Token ) {
 
     override fun toString(): String {
-        return "Parametro(nombre=$nombre, tipoDato=$tipoDato)"
+        return "Parametro( tipoDato=$tipoDato, nombre=$nombre)"
     }
 
     /**

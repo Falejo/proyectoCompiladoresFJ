@@ -1,5 +1,7 @@
 package co.edu.uniquindio.compiladores.lexico
 
+import co.edu.uniquindio.compiladores.lexico.Error
+
 class AnalizadorLexico(var codigoFuente:String) {
 
 
@@ -37,9 +39,9 @@ class AnalizadorLexico(var codigoFuente:String) {
         palabrasRes.add("yes")
         palabrasRes.add("more")
         palabrasRes.add("lessons")
-        palabrasRes.add("isTF")
-        palabrasRes.add("isT")
-        palabrasRes.add("isF")
+        palabrasRes.add("istf")
+        palabrasRes.add("ist")
+        palabrasRes.add("isf")
         palabrasRes.add("recent")
         palabrasRes.add("subject")
         palabrasRes.add("fix")
@@ -653,7 +655,7 @@ class AnalizadorLexico(var codigoFuente:String) {
      * Este metodo permite agregar un error a la lista de errores
      */
     fun reportarError( mensaje:String){
-        listaErrores.add(Error(mensaje,filaActual,columnaActual))
+        listaErrores.add(Error(mensaje,filaActual,columnaActual,Categoria.ERROR.toString()))
     }
 
 }
