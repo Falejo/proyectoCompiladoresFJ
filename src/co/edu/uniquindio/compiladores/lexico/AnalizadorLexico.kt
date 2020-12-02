@@ -1,5 +1,7 @@
 package co.edu.uniquindio.compiladores.lexico
 
+import co.edu.uniquindio.compiladores.lexico.Error
+
 class AnalizadorLexico(var codigoFuente:String) {
 
 
@@ -37,15 +39,19 @@ class AnalizadorLexico(var codigoFuente:String) {
         palabrasRes.add("yes")
         palabrasRes.add("more")
         palabrasRes.add("lessons")
-        palabrasRes.add("isTF")
-        palabrasRes.add("isT")
-        palabrasRes.add("isF")
+        palabrasRes.add("istf")
+        palabrasRes.add("ist")
+        palabrasRes.add("isf")
         palabrasRes.add("recent")
         palabrasRes.add("subject")
         palabrasRes.add("fix")
         palabrasRes.add("float")
         palabrasRes.add("long")
         palabrasRes.add("duplex")
+        palabrasRes.add("ente")
+        palabrasRes.add("cade")
+        palabrasRes.add("car")
+        palabrasRes.add("not")
         palabrasRes.add("time")
         palabrasRes.add("by")
         palabrasRes.add("open")
@@ -61,6 +67,9 @@ class AnalizadorLexico(var codigoFuente:String) {
         palabrasRes.add("pack")
         palabrasRes.add("bring")
         palabrasRes.add("obtain")
+        palabrasRes.add("read")
+        palabrasRes.add("print")
+        palabrasRes.add("back")
 
 
         while (caracterActual != finCodigo) {
@@ -179,7 +188,6 @@ class AnalizadorLexico(var codigoFuente:String) {
             var filaInicial = filaActual
             var columnaInicial = columnaActual
             var posicionInicial = posicionActual
-            var new = ""
 
 
             lexema += caracterActual
@@ -190,24 +198,23 @@ class AnalizadorLexico(var codigoFuente:String) {
                 while (caracterActual != '$' && lexema.length < 9  ) {
                     lexema += caracterActual
                     obtenerSiguienteCaracter()
-
                 }
 
                 if (caracterActual == '$'){
                     lexema+= caracterActual
                     almacenarToken(lexema, Categoria.IDENTIFICADOR, filaInicial, columnaInicial)
+                    obtenerSiguienteCaracter()
                     return true
                 }
 
             }
-                lexema += caracterActual
-                almacenarToken( lexema, Categoria.ERROR, filaInicial, columnaInicial)
-            }
+            lexema += caracterActual
+            almacenarToken( lexema, Categoria.ERROR, filaInicial, columnaInicial)
+            obtenerSiguienteCaracter()
+        }
 
         return false
     }
-
-
 
     /**
      * Este metodo permite construir el token de caracter
@@ -336,9 +343,9 @@ class AnalizadorLexico(var codigoFuente:String) {
             obtenerSiguienteCaracter()
 
             while (caracterActual.isLetter() ) {
-                    palabra+=caracterActual
-                    lexema += caracterActual
-                    obtenerSiguienteCaracter()
+                palabra+=caracterActual
+                lexema += caracterActual
+                obtenerSiguienteCaracter()
             }
 
             if (palabrasRes.contains(palabra.toLowerCase())) {
@@ -401,16 +408,16 @@ class AnalizadorLexico(var codigoFuente:String) {
             obtenerSiguienteCaracter()
 
 
-                while (caracterActual != '"') {
-                    lexema += caracterActual
-                    obtenerSiguienteCaracter()
-                }
-                if (caracterActual == '"') {
-                    lexema += caracterActual
-                    obtenerSiguienteCaracter()
-                    almacenarToken(lexema, Categoria.CADENA, filaInicial, columnaInicial);
-                    return true
-                }
+            while (caracterActual != '"') {
+                lexema += caracterActual
+                obtenerSiguienteCaracter()
+            }
+            if (caracterActual == '"') {
+                lexema += caracterActual
+                obtenerSiguienteCaracter()
+                almacenarToken(lexema, Categoria.CADENA, filaInicial, columnaInicial);
+                return true
+            }
 
 
         }
@@ -583,8 +590,8 @@ class AnalizadorLexico(var codigoFuente:String) {
 
 
             while (caracterActual != '?'){
-                  lexema+=caracterActual
-                  obtenerSiguienteCaracter()
+                lexema+=caracterActual
+                obtenerSiguienteCaracter()
             }
 
             lexema+=caracterActual
@@ -648,7 +655,7 @@ class AnalizadorLexico(var codigoFuente:String) {
      * Este metodo permite agregar un error a la lista de errores
      */
     fun reportarError( mensaje:String){
-        listaErrores.add(Error(mensaje,filaActual,columnaActual, Categoria.ERROR.toString()))
+        listaErrores.add(Error(mensaje,filaActual,columnaActual,Categoria.ERROR.toString()))
     }
 
 }
