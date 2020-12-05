@@ -12,4 +12,14 @@ class Interrupcion(var interrupcion: Token?):Sentencia() {
 
         return raiz
     }
+
+    override fun getJavaCode(): String {
+        var codigo =""
+
+        if (interrupcion!= null){
+            codigo= interrupcion!!.getJavaCode()+";"
+        }
+        return codigo
+    }
+
 }

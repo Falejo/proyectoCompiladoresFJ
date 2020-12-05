@@ -41,4 +41,21 @@ class ExpresionLogica() : Expresion() {
         return "~istf"
     }
 
+    override fun getJavaCode(): String {
+        var codigo=""
+
+        if (expresionLogica != null && expresionLogica != null ){
+            codigo =expresionRelacional!!.getJavaCode() +" " +operadorLogicoBinario!!.getJavaCode()+ " "+expresionLogica!!.getJavaCode()
+        }else{
+            if (operadorLogicoUnario != null && expresionRelacional != null){
+                codigo =operadorLogicoUnario!!.getJavaCode() +" ("+expresionRelacional!!.getJavaCode()+")"
+            }else
+                if (expresionRelacional != null){
+                    codigo =expresionRelacional!!.getJavaCode()
+                }
+        }
+
+        return codigo
+    }
+
 }

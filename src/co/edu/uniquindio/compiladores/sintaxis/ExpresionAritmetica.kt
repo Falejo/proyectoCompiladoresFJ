@@ -156,8 +156,21 @@ class ExpresionAritmetica():Expresion() {
             expresionAritmetica2!!.analizarSemantica(tablaSimbolos, listaErrores, ambito)
         }
     }
+    override fun getJavaCode(): String {
+        var codigo=""
+
+        if (expresionAritmetica1 != null && expresionAritmetica2 != null) {
+            codigo += "(" + expresionAritmetica1!!.getJavaCode() + operador!!.getJavaCode() + expresionAritmetica2!!.getJavaCode() + ")"
+        } else if (valorNumerico != null && expresionAritmetica2 != null) {
+            codigo += "(" + valorNumerico!!.getJavaCode() + operador!!.getJavaCode() + expresionAritmetica2!!.getJavaCode() + ")"
+        } else if (expresionAritmetica1 != null) {
+            codigo += "("+expresionAritmetica1!!.getJavaCode()+")"
+        } else if (valorNumerico != null) {
+            codigo += valorNumerico!!.getJavaCode()
+        }
 
 
 
-
+        return codigo
+    }
 }

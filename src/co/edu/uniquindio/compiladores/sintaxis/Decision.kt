@@ -56,4 +56,33 @@ class Decision(var expresionLogica:ExpresionLogica, var listaSentencia:ArrayList
         }
     }
     }
+
+    override fun getJavaCode(): String {
+        var codigo = "if ("
+
+        if (expresionLogica != null){
+            codigo += expresionLogica!!.getJavaCode()
+        }
+        codigo += ") { \n"
+
+        if (listaSentencia != null){
+            for (sent in listaSentencia!!){
+                codigo +=sent.getJavaCode()
+            }
+        }
+        codigo +="} \n"
+
+        if (listaSentenciaElse != null){
+            codigo += "else { \n"
+            if (listaSentenciaElse != null){
+                for (sent in listaSentenciaElse!!){
+                    codigo +=sent.getJavaCode()
+                }
+            }
+
+            codigo +="} \n"
+        }
+
+        return codigo
+    }
 }

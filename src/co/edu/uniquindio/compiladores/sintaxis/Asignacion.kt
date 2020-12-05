@@ -74,5 +74,15 @@ class Asignacion(): Sentencia() {
 
         }
     }
+    override fun getJavaCode(): String {
+        var codigo=nombre!!.getJavaCode() + operador!!.getJavaCode()
 
+        if (expresion != null){
+            codigo += expresion!!.getJavaCode()
+        }else if (invocacion != null){
+            codigo += invocacion!!.getJavaCode()
+        }
+        codigo += "; \n"
+        return codigo
+    }
 }

@@ -57,4 +57,19 @@ class Arreglo(var nombre:Token, var tipoArreglo:Token,var listaExpresiones:Array
         }
     }
 
+    override fun getJavaCode(): String {
+        var codigo= tipoArreglo.getJavaCode()+"[] "+nombre.getJavaCode()+" "
+
+        if (listaExpresiones!=null){
+            codigo += "= {"
+            for (expr in listaExpresiones!!){
+                codigo += expr.getJavaCode()+", "
+            }
+            codigo = codigo.substring(0,codigo.length-2)+"}"
+        }
+        codigo+= "; \n"
+        print(codigo)
+        return codigo
+    }
+
 }

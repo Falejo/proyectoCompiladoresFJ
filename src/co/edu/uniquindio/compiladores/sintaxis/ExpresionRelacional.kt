@@ -24,4 +24,10 @@ class ExpresionRelacional(var expresion1:Expresion,var operadorRelacional:Token,
     override fun obtenerTipo(tablaSimbolos: TablaSimbolos, ambito:String, listaErrores:ArrayList<Error>):String{
         return "~istf"
     }
+
+    override fun getJavaCode(): String {
+        var codigo = expresion1.getJavaCode()+" "+operadorRelacional.getJavaCode()+ " "+expresion2.getJavaCode()
+
+        return codigo
+    }
 }

@@ -14,4 +14,8 @@ class Incremento(var nombre:Token,var operador:Token):Sentencia() {
         return raiz
     }
 
+    override fun getJavaCode(): String {
+        return nombre.getJavaCode()+"++;"
+    }
+
 }

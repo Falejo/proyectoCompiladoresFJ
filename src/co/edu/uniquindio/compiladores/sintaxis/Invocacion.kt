@@ -19,4 +19,17 @@ class Invocacion(var nombre:Token, var listaArgumentos:ArrayList<Expresion>):Sen
 
         return raiz
     }
+
+    override fun getJavaCode(): String {
+        var codigo ="\t \t"+ nombre.getJavaCode()+" ("
+
+        if (listaArgumentos.isNotEmpty()) {
+            for (arg in listaArgumentos) {
+                codigo += arg.getJavaCode() + ", "
+            }
+            codigo = codigo.substring(0, codigo.length - 2)
+        }
+        codigo+= "); \n"
+        return codigo
+    }
 }
