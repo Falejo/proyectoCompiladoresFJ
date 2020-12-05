@@ -16,11 +16,27 @@ class Retorno(var expresion: Expresion?):Sentencia() {
         return raiz
     }
 
-    override fun analizarSemantica(tablaSimbolos: TablaSimbolos, erroresSemanticos: ArrayList<Error>, ambito: String) {
+
+
+    override fun analizarSemantica(tablaSimbolos: TablaSimbolos, listaErrores: ArrayList<Error>, ambito: String) {
+
+
         if (expresion != null) {
-            expresion!!.analizarSemantica(tablaSimbolos, erroresSemanticos, ambito)
+            expresion!!.analizarSemantica(tablaSimbolos, listaErrores, ambito)
+            var tipo = expresion!!.obtenerTipo(tablaSimbolos, ambito, listaErrores)
+            if (tipo != null) {
+                listaErrores.add(Error("El tipo dato de funcion ($tipo) no coincide con tipo dato de retorno ($ambito)",0,0,"" ))
+
+            }
         }
+
     }
+
+    fun obtenerTipo(tablaSimbolos: TablaSimbolos, ambito: String, listaErrores: ArrayList<Error>){
+
+
+    }
+
 
     override fun getJavaCode(): String {
         var codigo=""

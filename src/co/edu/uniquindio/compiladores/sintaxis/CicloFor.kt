@@ -41,6 +41,22 @@ class CicloFor(var lista:Token, var item:Token, var tipoDato:Token, var listaSen
 
         }
     }
+
+    override fun analizarSemantica(tablaSimbolos: TablaSimbolos, erroresSemanticos: ArrayList<Error>, ambito: String) {
+        var simb=tablaSimbolos.buscarSimboloValor(lista.lexema,ambito)
+
+        if (simb== null){
+            erroresSemanticos.add(Error("La lista ${lista.lexema} no existe dentro del ambito $ambito",lista.fila,lista.columna,""))
+        }
+
+        if (listaSentencias != null) {
+            for (sent in listaSentencias!!){
+                sent.analizarSemantica(tablaSimbolos,erroresSemanticos,ambito)
+            }
+
+        }
+    }
+
     override fun getJavaCode(): String {
         var codigo="for ("+tipoDato.getJavaCode() +" "+item.getJavaCode()+": "+lista.getJavaCode() +"){"
 

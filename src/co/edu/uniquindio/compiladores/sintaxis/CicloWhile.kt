@@ -1,6 +1,8 @@
 package co.edu.uniquindio.compiladores.sintaxis
 
 import javafx.scene.control.TreeItem
+import co.edu.uniquindio.compiladores.lexico.Error
+import co.edu.uniquindio.compiladores.semantica.TablaSimbolos
 
 class CicloWhile(var expRelacional: ExpresionRelacional?, var listaSentencias: ArrayList<Sentencia>?):Sentencia() {
 
@@ -22,6 +24,28 @@ class CicloWhile(var expRelacional: ExpresionRelacional?, var listaSentencias: A
 
         raiz.children.add(raizSentencias)
         return raiz
+    }
+
+    override fun llenarTablaSimbolos (tablaSimbolos: TablaSimbolos, erroresSemanticos: ArrayList<Error>, ambito: String) {
+        if (listaSentencias != null) {
+            for (sent in listaSentencias!!){
+                sent.llenarTablaSimbolos(tablaSimbolos,erroresSemanticos,ambito)
+            }
+
+        }
+    }
+
+    override fun analizarSemantica(tablaSimbolos: TablaSimbolos, erroresSemanticos: ArrayList<Error>, ambito: String) {
+        if (listaSentencias != null) {
+            for (sent in listaSentencias!!){
+                sent.analizarSemantica(tablaSimbolos,erroresSemanticos,ambito)
+            }
+
+        }
+
+        if (expRelacional != null){
+            expRelacional!!.analizarSemantica(tablaSimbolos, erroresSemanticos, ambito)
+        }
     }
 
 
