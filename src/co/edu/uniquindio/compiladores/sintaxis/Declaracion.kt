@@ -27,7 +27,8 @@ class Declaracion(var modAcceso:Token?,var tipoDato:Token, var nombre:Token,var 
      */
     override fun llenarTablaSimbolos(tablaSimbolos: TablaSimbolos, listaErrores: ArrayList<Error>, ambito: String) {
         var acceso=""
-        if (modAcceso!=null) acceso=modAcceso!!.lexema
+        if (modAcceso!=null)
+            acceso=modAcceso!!.lexema
         tablaSimbolos.guardarSimboloValor(nombre.lexema,tipoDato.lexema,true,ambito,nombre.fila,nombre.columna)
     }
 

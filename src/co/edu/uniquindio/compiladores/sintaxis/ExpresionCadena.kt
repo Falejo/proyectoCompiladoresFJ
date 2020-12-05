@@ -27,6 +27,15 @@ class ExpresionCadena(var cadena: Token, var expresion:Expresion?):Expresion() {
     return "~cade"
     }
 
+
+    /**
+     *
+     */
+    override fun analizarSemantica(tablaSimbolos: TablaSimbolos, listaErrores: ArrayList<Error>, ambito: String) {
+        if (expresion != null){
+            expresion!!.analizarSemantica(tablaSimbolos, listaErrores, ambito)
+        }
+
     override fun getJavaCode(): String {
         var codigo = cadena.getJavaCode()
 
@@ -34,6 +43,7 @@ class ExpresionCadena(var cadena: Token, var expresion:Expresion?):Expresion() {
             codigo +="+" +expresion!!.getJavaCode()+";"
         }
         return codigo
+
     }
 
 }

@@ -111,7 +111,9 @@ class InicioController : Initializable{
 
                     semantica.analizarSemantica()
 
-                    println(semantica!!.listaErrores)
+                   // println(semantica!!.listaErrores)
+
+                    tblErroresSintacticos.items=FXCollections.observableArrayList(semantica!!.listaErrores)
                 }
             }else{
                 var alerta=Alert(Alert.AlertType.WARNING)

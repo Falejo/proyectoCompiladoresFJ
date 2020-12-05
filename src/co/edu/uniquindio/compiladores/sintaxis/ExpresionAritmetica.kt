@@ -135,7 +135,7 @@ class ExpresionAritmetica():Expresion() {
                             )
                     )
 
-                }else if (simb!!.tipo != "int" && simb!!.tipo != "decimal") {
+                }else if (simb!!.tipo != "~ente" && simb!!.tipo != "~duplex") {
 
                     listaErrores.add(
                             Error(

@@ -12,4 +12,6 @@ class Leer(var variable:Token):Sentencia() {
         raiz.children.add(TreeItem("Variable: ${variable.lexema}"))
         return raiz
     }
+
+
 }
