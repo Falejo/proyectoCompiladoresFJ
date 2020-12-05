@@ -32,9 +32,10 @@ class ExpresionCadena(var cadena: Token, var expresion:Expresion?):Expresion() {
      *
      */
     override fun analizarSemantica(tablaSimbolos: TablaSimbolos, listaErrores: ArrayList<Error>, ambito: String) {
-        if (expresion != null){
+        if (expresion != null) {
             expresion!!.analizarSemantica(tablaSimbolos, listaErrores, ambito)
         }
+    }
 
     override fun getJavaCode(): String {
         var codigo = cadena.getJavaCode()

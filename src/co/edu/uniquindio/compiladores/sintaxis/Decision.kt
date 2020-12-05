@@ -57,6 +57,25 @@ class Decision(var expresionLogica:ExpresionLogica, var listaSentencia:ArrayList
     }
     }
 
+    override fun analizarSemantica(tablaSimbolos: TablaSimbolos, erroresSemanticos: ArrayList<Error>, ambito: String) {
+        if (listaSentencia!=null){
+            for (sent in listaSentencia!!){
+                sent.analizarSemantica(tablaSimbolos,erroresSemanticos,ambito)
+            }
+        }
+
+        if (listaSentenciaElse!=null){
+            for (sentElse in listaSentenciaElse!!){
+                sentElse.analizarSemantica(tablaSimbolos,erroresSemanticos,ambito)
+            }
+        }
+
+        if (expresionLogica != null){
+            expresionLogica!!.analizarSemantica(tablaSimbolos, erroresSemanticos, ambito)
+        }
+    }
+
+
     override fun getJavaCode(): String {
         var codigo = "if ("
 

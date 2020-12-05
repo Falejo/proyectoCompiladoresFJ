@@ -25,6 +25,11 @@ class ExpresionRelacional(var expresion1:Expresion,var operadorRelacional:Token,
         return "~istf"
     }
 
+    override fun analizarSemantica(tablaSimbolos: TablaSimbolos, erroresSemanticos: ArrayList<Error>, ambito: String) {
+        expresion1.analizarSemantica(tablaSimbolos, erroresSemanticos, ambito)
+        expresion2.analizarSemantica(tablaSimbolos, erroresSemanticos, ambito)
+    }
+
     override fun getJavaCode(): String {
         var codigo = expresion1.getJavaCode()+" "+operadorRelacional.getJavaCode()+ " "+expresion2.getJavaCode()
 
