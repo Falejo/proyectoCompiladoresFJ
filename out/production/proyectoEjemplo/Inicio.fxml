@@ -51,7 +51,7 @@
                         </AnchorPane>
                     </content>
                 </Tab>
-                <Tab fx:id="tabErroresSintacticos" text="Errores Sintacticos">
+                <Tab fx:id="tabErroresSintacticos" text="Errores ">
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                             <children>

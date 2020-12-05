@@ -66,9 +66,13 @@ class Asignacion(): Sentencia() {
                 var tipoExp =expresion!!.obtenerTipo(tablaSimbolos, ambito, listaErrores)
 
                 if (tipoExp != tipo ){
-                    listaErrores.add(Error("El tipo de dato de la expresion ${tipoExp} no coincide con el tipo de dato del campo " +
+                    listaErrores.add(Error("Le esta asignando un valor ${tipoExp} a una variable " +
                             "${nombre!!.lexema} que es de tipo $tipo", nombre!!.fila,nombre!!.columna,""))
+                }else if (invocacion != null){
+                    invocacion!!.analizarSemantica(tablaSimbolos, listaErrores, ambito)
+
                 }
+
 
             }
 

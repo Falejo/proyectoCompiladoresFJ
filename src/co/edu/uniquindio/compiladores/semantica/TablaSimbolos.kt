@@ -29,7 +29,7 @@ class TablaSimbolos (var listaErrores:ArrayList<Error> ) {
 
         var simb:Simbolo?=buscarSimboloFuncion(nombre,tipoParametros)
 
-        if (s == null){
+        if (simb == null){
             listaSimbolos.add(Simbolo(nombre, tipoRetorno, tipoParametros, ambito))
         }else{
             listaErrores.add(Error("La funcion con nombre $nombre, ya existe dentro del ambito $ambito", fila+1, columna+1,""))
