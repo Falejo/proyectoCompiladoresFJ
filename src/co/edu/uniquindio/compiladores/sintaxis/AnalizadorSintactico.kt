@@ -378,10 +378,10 @@ class AnalizadorSintactico (var listaTokens:ArrayList<Token>){
         if (sentencia != null) {
             return sentencia
         }
-       /** sentencia = esArreglo()
+       sentencia = esArreglo()
         if (sentencia != null){
             return sentencia
-        }*/
+        }
 
         sentencia = esAsignacion()
         if (sentencia != null){
@@ -758,7 +758,7 @@ class AnalizadorSintactico (var listaTokens:ArrayList<Token>){
     }
 
     /**
-     * <<CicloFor> ::= ~by “(” Identificador  in Identificador“)”  “{” <ListaSentencia> “}”
+     * <<CicloFor> ::= ~by “(” TipoDato Identificador  in Identificador“)”  “{” <ListaSentencia> “}”
      */
     fun esCicloFor():CicloFor?{
         while (tokenActual.categoria == Categoria.FIN_SENTENCIA) obtenerSiguienteToken()
@@ -772,6 +772,17 @@ class AnalizadorSintactico (var listaTokens:ArrayList<Token>){
                 reportarError("Falta parentesis izquierdo en el For","Ciclo For")
                 obtenerSiguienteToken()
             }
+
+            var tipoDato = esTipoParametro()
+
+            if (tipoDato != null) {
+                obtenerSiguienteToken()
+            } else {
+                reportarError("Tipo de dato invalido en el For","Ciclo For")
+                tipoDato= Token("Error",Categoria.ERROR,tokenActual.fila,tokenActual.columna)
+                obtenerSiguienteToken()
+            }
+
             var lista:Token?=null
             if (tokenActual.categoria != Categoria.IDENTIFICADOR) {
                 reportarError("Lista no valida en el For","Ciclo For")
@@ -783,7 +794,7 @@ class AnalizadorSintactico (var listaTokens:ArrayList<Token>){
                 obtenerSiguienteToken()
             }
 
-            if (tokenActual.categoria == Categoria.PALABRA_RESERVADA && tokenActual.lexema == "in") {
+            if (tokenActual.categoria == Categoria.PALABRA_RESERVADA && tokenActual.lexema == "~in") {
                 obtenerSiguienteToken()
             } else {
                 reportarError("Falta la palabra reservada 'in' en el For","Ciclo For")
@@ -797,16 +808,6 @@ class AnalizadorSintactico (var listaTokens:ArrayList<Token>){
                 reportarError("Identificador del item invalido en el For","Ciclo For")
                 finCodigo(Categoria.PARENTESIS_DERECHO)
                 item= Token("Sin Item",Categoria.ERROR,tokenActual.fila,tokenActual.columna)
-            }
-
-            var tipoDato = esTipoParametro()
-
-            if (tipoDato != null) {
-                obtenerSiguienteToken()
-            } else {
-                reportarError("Tipo de dato invalido en el For","Ciclo For")
-                tipoDato= Token("Error",Categoria.ERROR,tokenActual.fila,tokenActual.columna)
-                obtenerSiguienteToken()
             }
 
             if (tokenActual.categoria == Categoria.PARENTESIS_DERECHO) {
@@ -1066,6 +1067,57 @@ class AnalizadorSintactico (var listaTokens:ArrayList<Token>){
 
             obtenerSiguienteToken()
         }
+    }
+
+    /**
+     *
+     * <Arreglo>:: ~array <TipoDato> identificadorv ["="[" <ListaArgumentos> "]"] "_"
+     *
+     */
+    fun esArreglo(): Arreglo? {
+
+        if (tokenActual.categoria == Categoria.PALABRA_RESERVADA && tokenActual.lexema == "~array") {
+            obtenerSiguienteToken()
+            val tipoDato = esTipoDato()
+            if (tipoDato != null) {
+                obtenerSiguienteToken()
+                if (tokenActual.categoria == Categoria.IDENTIFICADOR) {
+                    var nombre = tokenActual
+                    obtenerSiguienteToken()
+                    if (tokenActual.categoria == Categoria.OPERADOR_ASIGNACION && tokenActual.lexema == "=") {
+                        obtenerSiguienteToken()
+                        if (tokenActual.categoria == Categoria.CORCHETE_IZQUIERDO) {
+                            obtenerSiguienteToken()
+                            var expresion = esListaArgumentos()
+                            if (tokenActual.categoria == Categoria.CORCHETE_DERECHO)
+                                obtenerSiguienteToken()
+                            if (tokenActual.categoria == Categoria.FIN_SENTENCIA) {
+                                obtenerSiguienteToken()
+                                return Arreglo(nombre, tipoDato, expresion)
+                            }else{
+                                reportarError(" Falta operador terminal", "Expresion arreglo")
+                                println("Falta operador terminal")
+                            }
+                        }else{
+                            reportarError(" Falta corchete derecho", "Expresion arreglo")
+                            println("Falta corchete derecho")
+                        }
+                    } else {
+                        if (tokenActual.categoria == Categoria.FIN_SENTENCIA) {
+                            obtenerSiguienteToken()
+                            return Arreglo(nombre, tipoDato, null)
+                        }else{
+                            reportarError(" Falta operador terminal", "Expresion arreglo")
+                            println("Falta operador terminal")
+                        }
+                    }
+                }else{
+                    reportarError(" Falta operador terminal", "Expresion arreglo")
+                    println("Falta operador terminal")
+                }
+            }
+        }
+        return null
     }
 
 }

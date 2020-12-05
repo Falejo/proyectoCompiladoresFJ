@@ -21,4 +21,14 @@ class Retorno(var expresion: Expresion?):Sentencia() {
             expresion!!.analizarSemantica(tablaSimbolos, erroresSemanticos, ambito)
         }
     }
+
+    override fun getJavaCode(): String {
+        var codigo=""
+        if (expresion != null) {
+            codigo= "return "+expresion!!.getJavaCode()+"; \n"
+        }
+
+        return codigo
+    }
+
 }

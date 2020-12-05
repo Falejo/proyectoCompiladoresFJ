@@ -15,4 +15,15 @@ class ValorNumerico(var signo:Token, var numero:Token) {
 
         return raiz
     }
+
+    fun getJavaCode():String{
+        var codigo=""
+        if (signo.lexema=="+"){
+            codigo +=numero.getJavaCode()
+        }else {
+            codigo += signo.getJavaCode() + numero.getJavaCode()
+        }
+        return codigo
+    }
+
 }

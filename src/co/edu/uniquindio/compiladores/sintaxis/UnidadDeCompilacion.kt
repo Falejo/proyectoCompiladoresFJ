@@ -42,4 +42,27 @@ class UnidadDeCompilacion(var nombreClass: Token, var listaFunciones:ArrayList<F
 
         }
     }
+
+    fun getJavaCod():String{
+
+        var codigo= "import javax.swing.*; \n" +
+                "public class ${nombreClass.getJavaCode()} { \n"
+
+        for (f in listaFunciones) {
+            codigo += f.getJavaCode()
+        }
+        codigo += "}"
+
+        /*var principal:Boolean=false
+
+        for ( func in listaFunciones){
+            if (func.nombreFuncion.lexema.toLowerCase() == "principal"){
+                var principal=true
+            }
+        }
+        if (!principal){
+            erroresSemanticos.add(Error("No no se encontro la clase principal",0,0,""))
+        }*/
+        return codigo
+    }
 }

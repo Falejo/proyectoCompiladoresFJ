@@ -40,4 +40,22 @@ class Declaracion(var modAcceso:Token?,var tipoDato:Token, var nombre:Token,var 
         }
     }
 
+    override fun getJavaCode():String{
+        var codigo = "\t"
+        /* if (modAcceso != null){
+             codigo += modAcceso!!.getJavaCode()+" "
+         }*/
+        codigo += tipoDato.getJavaCode()+" "
+
+        if (asignacion != null){
+            codigo += asignacion!!.getJavaCode()
+        }else{
+            codigo += nombre.getJavaCode()+";"
+        }
+
+        codigo+= "\n"
+
+        return codigo
+    }
+
 }
