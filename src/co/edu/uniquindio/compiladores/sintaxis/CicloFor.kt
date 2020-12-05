@@ -41,8 +41,18 @@ class CicloFor(var lista:Token, var item:Token, var tipoDato:Token, var listaSen
 
         }
     }
+    override fun getJavaCode(): String {
+        var codigo="for ("+tipoDato.getJavaCode() +" "+item.getJavaCode()+": "+lista.getJavaCode() +"){"
 
+        if (listaSentencias != null){
+            for (sent in listaSentencias!!){
+                codigo+= sent.getJavaCode()
+            }
+        }
 
+        codigo+="} \n"
 
+        return codigo
+    }
 
 }

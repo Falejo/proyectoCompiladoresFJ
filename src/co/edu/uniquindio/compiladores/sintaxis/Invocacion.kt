@@ -21,6 +21,7 @@ class Invocacion(var nombre:Token, var listaArgumentos:ArrayList<Expresion>):Sen
         return raiz
     }
 
+
     override fun analizarSemantica(tablaSimbolos: TablaSimbolos, erroresSemanticos: ArrayList<Error>, ambito: String) {
         var listaTipoArgs=obtenerTiposArgumentos(tablaSimbolos,ambito,erroresSemanticos)
         var s =tablaSimbolos.buscarSimboloFuncion(nombre.lexema,listaTipoArgs)
@@ -37,6 +38,20 @@ class Invocacion(var nombre:Token, var listaArgumentos:ArrayList<Expresion>):Sen
             listaArgs.add(arg.obtenerTipo(tablaSimbolos,ambito,listaErrores ))
         }
         return listaArgs
+    }
+
+
+    override fun getJavaCode(): String {
+        var codigo ="\t \t"+ nombre.getJavaCode()+" ("
+
+        if (listaArgumentos.isNotEmpty()) {
+            for (arg in listaArgumentos) {
+                codigo += arg.getJavaCode() + ", "
+            }
+            codigo = codigo.substring(0, codigo.length - 2)
+        }
+        codigo+= "); \n"
+        return codigo
     }
 
 }

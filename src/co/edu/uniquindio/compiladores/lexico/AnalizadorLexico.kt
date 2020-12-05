@@ -69,7 +69,9 @@ class AnalizadorLexico(var codigoFuente:String) {
         palabrasRes.add("obtain")
         palabrasRes.add("read")
         palabrasRes.add("print")
-        palabrasRes.add("back")
+        palabrasRes.add("array")
+        palabrasRes.add("in")
+
 
 
         while (caracterActual != finCodigo) {
@@ -193,9 +195,9 @@ class AnalizadorLexico(var codigoFuente:String) {
             lexema += caracterActual
             obtenerSiguienteCaracter()
 
-            if (caracterActual.isLowerCase()  ) {
+            if (caracterActual.isLowerCase() || caracterActual == 'P' ) {
 
-                while (caracterActual != '$' && lexema.length < 9  ) {
+                while (caracterActual != '$' && lexema.length < 11  ) {
                     lexema += caracterActual
                     obtenerSiguienteCaracter()
                 }
@@ -425,9 +427,6 @@ class AnalizadorLexico(var codigoFuente:String) {
         return false
     }
 
-
-
-
     /**
      * Este metodo permite construir el token de operadores aritmeticos
      */
@@ -629,6 +628,9 @@ class AnalizadorLexico(var codigoFuente:String) {
         }
         return false
     }
+
+
+
 
     /**
      * este metodo nos permite ir recorriendo y obteniendo el siguiente caracter

@@ -12,4 +12,9 @@ class Imprimir(var expresion: Expresion):Sentencia() {
         raiz.children.add(expresion.getArbolVisual())
         return raiz
     }
+
+    override fun getJavaCode(): String {
+        return "JOptionPane.showMessageDialog(null,"+expresion.getJavaCode()+"); \n"
+    }
+
 }

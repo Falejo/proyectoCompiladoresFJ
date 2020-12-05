@@ -27,6 +27,7 @@ class ExpresionCadena(var cadena: Token, var expresion:Expresion?):Expresion() {
     return "~cade"
     }
 
+
     /**
      *
      */
@@ -34,6 +35,15 @@ class ExpresionCadena(var cadena: Token, var expresion:Expresion?):Expresion() {
         if (expresion != null){
             expresion!!.analizarSemantica(tablaSimbolos, listaErrores, ambito)
         }
+
+    override fun getJavaCode(): String {
+        var codigo = cadena.getJavaCode()
+
+        if (expresion != null){
+            codigo +="+" +expresion!!.getJavaCode()+";"
+        }
+        return codigo
+
     }
 
 }

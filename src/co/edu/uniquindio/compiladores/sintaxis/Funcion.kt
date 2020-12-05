@@ -82,4 +82,23 @@ class Funcion (var nombreFuncion: Token, var tipoRetorno: Token, var listaParame
 
         }
     }
+
+    fun getJavaCode():String {
+        var codigo:String
+        if (nombreFuncion.getJavaCode() == "main"){
+            codigo = "public static void main (String[] args){ \n"
+        }else{
+            codigo = tipoRetorno.getJavaCode() + " " + nombreFuncion.getJavaCode() + "("
+            for (p in listaParametros){
+                codigo += p.getJavaCode() + ", "
+            }
+            codigo = codigo.substring(0, codigo.length - 2)
+            codigo += "){ \n"
+        }
+        for (s in listaSentencias){
+            codigo += s.getJavaCode()
+        }
+        codigo += "} \n"
+        return codigo
+    }
 }

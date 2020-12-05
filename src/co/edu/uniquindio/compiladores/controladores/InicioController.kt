@@ -125,10 +125,10 @@ class InicioController : Initializable{
         escribirDatos(codFuente)
     }
 
-    /**
+
     @FXML
-    fun TraducirCodigo(e:ActionEvent){
-        if (lexico.listaErrores.isEmpty() && sintaxis.listaErrores.isEmpty() && semantica.erroresSemanticos.isEmpty()) {
+    fun traducirCodigo(e:ActionEvent){
+        if (lexico.listaErrores.isEmpty() && sintaxis.listaErrores.isEmpty()) {
             var codigoTraducido= unidadCompilacion!!.getJavaCod()
             File("src/Principal.java").writeText(codigoTraducido)
 
@@ -148,7 +148,7 @@ class InicioController : Initializable{
             alert.show()
         }
 
-    }**/
+    }
 
 
     /**
@@ -156,8 +156,6 @@ class InicioController : Initializable{
      */
     fun leerDatos(){
         try {
-
-
             var path:String=System.getProperty("java.io.tmpdir")+File.separator+"codFuente.txt"
             var archivo: File = File(path);
 
